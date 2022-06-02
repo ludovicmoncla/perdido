@@ -1,0 +1,18 @@
+Metadata-Version: 2.1
+Name: perdido
+Version: 0.0.1
+Summary: PERDIDO Geoparser python library
+Home-page: https://github.com/lmoncla/perdido
+Author: Ludovic Moncla
+Author-email: moncla.ludovic@gmail.com
+License: BSD-Clause-2
+Keywords: geoparsing named-entity-recognition geographic-information-retrieval toponym-resolution toponym-disambiguation
+Classifier: Development Status :: 3 - Alpha
+Classifier: License :: OSI Approved :: BSD License
+Classifier: Operating System :: POSIX :: Other
+Classifier: Operating System :: MacOS
+Classifier: Programming Language :: Python :: 3
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# perdido

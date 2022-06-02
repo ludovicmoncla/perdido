@@ -1,4 +1,3 @@
 request
 folium
-ast
 lxml

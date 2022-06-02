@@ -1,6 +1,4 @@
 import requests
-import folium
-import geojson
 import json
 import ast
 import lxml.etree as etree

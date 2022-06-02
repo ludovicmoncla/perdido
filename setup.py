@@ -40,7 +40,7 @@ setuptools.setup(
     description="PERDIDO Geoparser python library",
     long_description=long_description,
     long_description_content_type='text/markdown',
-    url='https://github.com/lmoncla/perdido',
+    url='https://github.com/ludovicmoncla/perdido',
     packages=setuptools.find_packages(),
     classifiers=[
          # How mature is this project? Common values are

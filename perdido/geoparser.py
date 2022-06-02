@@ -32,6 +32,13 @@ class Entity:
         #...
 
 
+class Toponym: 
+    def __init__(self, name, ):
+
+        self.name = name
+        
+
+
 class Token:
     def __init__(self, text, lemma=None, pos=None):
 
@@ -54,6 +61,8 @@ class Perdido:
         self.ne = []
         self.ene = []
         self.tokens = []
+
+        self.toponyms = []
 
         # TODO ajouter le parsing xml pour récupérer les différents éléments :
 

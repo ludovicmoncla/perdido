@@ -17,7 +17,29 @@ def getResult(jsonStr, field='result', outputFormat='json'):
     else:
         return None
 
-#TODO faire une fonction qui génére le geojson à partir de la TEI
+
+class Entity:
+    def __init__(self, text, tokens, tag, parent=None, child=None, level=0):
+
+        self.text = text
+        self.tokens = tokens
+        self.tag = tag
+    
+        self.parent = parent
+        self.child = child
+
+        self.level = level # find a better name?
+        #...
+
+
+class Token:
+    def __init__(self, text, lemma=None, pos=None):
+
+        self.text = text
+        self.lemma = lemma
+        self.pos = pos
+        
+
 
 
 #TODO deplacer cette classe dans un nouveau fichier perdido.py
@@ -25,15 +47,33 @@ class Perdido:
 
     def __init__(self):
 
-        self._txt = None
-        self._tei = None  # type etree xml, string or both?
-        self._geojson = None
+        self.text = None
+        self.tei = None  # type etree xml, string or both?
+        self.geojson = None
         
-        self._ne = []
-        self._ene = []
-        self._tokens = []
+        self.ne = []
+        self.ene = []
+        self.tokens = []
 
         # TODO ajouter le parsing xml pour récupérer les différents éléments :
+
+
+    def parseTEI(self):
+        root = etree.fromstring(self.tei)
+        for w in root.findall('.//w'):
+            lemma = w.get('lemma') if 'lemma' in w.attrib else  ""
+            pos = w.get('type') if 'type' in w.attrib else  ""
+            self.tokens.append(Token(w.text, lemma, pos))
+
+        
+        for rs in root.findall('.//name'):
+
+            #self.ne.append(Token(rs.text, lemma, pos))
+            pass        
+
+    #TODO ajouter une méthode qui retourne le contenu txt d'une balise tei (boucle sur les balises w)
+    
+    #TODO ajouter les méthodes de display
 
 
 class Geoparser:
@@ -67,11 +107,12 @@ class Geoparser:
         r = requests.post(self._urlAPI + self._serviceGeoparsing, params=parameters)
         
         res = Perdido()
-        res._txt = content
-        res._tei = getResult(r, 'xml-tei')
-        res._geojson = getResult(r, 'geojson')
+        res.txt = content
+        res.tei = getResult(r, 'xml-tei', 'xml')
+        res.geojson = getResult(r, 'geojson')
 
         #TODO ajouter l'appel à la méthode de Perdido qui va remplir les attributs 
+        res.parseTEI()
 
         return res
 

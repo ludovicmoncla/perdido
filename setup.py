@@ -10,7 +10,7 @@ def get_requirements(remove_links=True):
         with open('requirements.txt') as f:
             requirements = f.read().splitlines()
     except Exception as ex:
-        with open('DecoraterBotUtils.egg-info\requires.txt') as f:
+        with open('perdido.egg-info\requires.txt') as f:
             requirements = f.read().splitlines()
     if remove_links:
         for requirement in requirements:

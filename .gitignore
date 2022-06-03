@@ -3,3 +3,4 @@
 venv
 tests
 __pycache__
+build

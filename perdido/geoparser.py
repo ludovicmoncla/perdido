@@ -1,9 +1,9 @@
 import lxml.etree as etree
 import folium
 import geojson
-from utils.webservices import WebService
-from utils.xml import *
-from utils.map import *
+from perdido.utils.webservices import WebService
+from perdido.utils.xml import *
+from perdido.utils.map import *
 
 
 class Geoparser:

@@ -1,12 +1,12 @@
 # Perdido Geoparser Python library
 
-
-
 [![PyPI](https://img.shields.io/pypi/v/perdido)](https://pypi.org/project/perdido)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](http://colab.research.google.com/github/ludovicmoncla/perdido/blob/main/notebooks/demo_Geoparser.ipynb)
 [![PyPI - License](https://img.shields.io/pypi/l/perdido?color=yellow)](https://github.com/ludovicmoncla/perdido/blob/main/LICENSE)
 
 [http://erig.univ-pau.fr/PERDIDO/](http://erig.univ-pau.fr/PERDIDO/)
+
+
 
 ## Installation
 
@@ -16,7 +16,7 @@ pip install --upgrade perdido
 ```
 
 
-## Usage
+## Quick start
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](http://colab.research.google.com/github/ludovicmoncla/perdido/blob/main/notebooks/demo_Geoparser.ipynb)
 
@@ -87,7 +87,7 @@ import requests
 url = 'http://choucas.univ-pau.fr/PERDIDO/api/'
 service = 'geoparsing'
 content = 'Je visite la ville de Lyon, Annecy et le Mont-Blanc.'
-parameters = {'api_key': 'demo', 'content':content}
+parameters = {'api_key': 'demo', 'content': content}
 
 r = requests.post(url+service, params=parameters)
 

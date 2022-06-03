@@ -3,6 +3,7 @@ MANIFEST.in
 README.md
 setup.py
 perdido/__init__.py
+perdido/geocoder.py
 perdido/geoparser.py
 perdido/test_geoparser.py
 perdido.egg-info/PKG-INFO
@@ -11,3 +12,6 @@ perdido.egg-info/dependency_links.txt
 perdido.egg-info/requires.txt
 perdido.egg-info/top_level.txt
 perdido/utils/__init__.py
+perdido/utils/map.py
+perdido/utils/webservices.py
+perdido/utils/xml.py

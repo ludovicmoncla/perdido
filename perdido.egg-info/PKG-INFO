@@ -1,8 +1,8 @@
 Metadata-Version: 2.1
 Name: perdido
-Version: 0.0.1
+Version: 0.0.5
 Summary: PERDIDO Geoparser python library
-Home-page: https://github.com/lmoncla/perdido
+Home-page: https://github.com/ludovicmoncla/perdido
 Author: Ludovic Moncla
 Author-email: moncla.ludovic@gmail.com
 License: BSD-Clause-2
@@ -15,4 +15,31 @@ Classifier: Programming Language :: Python :: 3
 Description-Content-Type: text/markdown
 License-File: LICENSE
 
-# perdido
+# Perdido Geoparser Python library
+
+
+[http://erig.univ-pau.fr/PERDIDO/](http://erig.univ-pau.fr/PERDIDO/)
+
+
+
+## Installation
+
+To install the latest stable version, you can use:
+```bash
+pip install --upgrade perdido
+```
+
+
+## Demonstration
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](http://colab.research.google.com/github/ludovicmoncla/perdido/blob/main/notebooks/demo_Geoparser.ipynb)
+
+
+
+# Perdido Geoparser Web Services
+
+[http://choucas.univ-pau.fr/docs#](http://choucas.univ-pau.fr/docs#/)
+
+
+
+``perdido`` is an active project still under developpement.

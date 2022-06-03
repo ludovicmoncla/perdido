@@ -27,6 +27,35 @@ pip install --upgrade perdido
 [http://choucas.univ-pau.fr/docs#](http://choucas.univ-pau.fr/docs#/)
 
 
+```python
+from perdido import geoparser
+
+p = geoparser.Geoparser()
+doc = p.parse('Je visite la ville de Lyon, Annecy et le Mont-Blanc.')
+
+print(' -- tokens -- ')
+for token in doc.tokens:
+    print(token.text, token.lemma, token.pos)
+
+print(' -- tei -- ')
+doc.tei
+
+print(' -- geojson -- ')
+doc.geojson
+
+print(' -- named entities -- ')
+for entity in doc.ne:
+    print(entity.text, '[' + entity.tag + ']')
+    if entity.tag == 'place':
+        entity.print_toponyms()
+
+print(' -- nested named entities -- ')
+for nestedEntity in doc.nne:
+    print(nestedEntity.text, '[' + nestedEntity.tag + ']')
+    if nestedEntity.tag == 'place':
+        nestedEntity.print_toponyms()
+```
+
 
 ## Example: call REST API in Python
 

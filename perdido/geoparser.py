@@ -2,7 +2,7 @@ import requests
 import json
 import ast
 import lxml.etree as etree
-from sklearn import neural_network
+
 
 
 #TODO deplacer cette fonction dans utils/xx.py

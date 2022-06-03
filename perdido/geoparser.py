@@ -2,6 +2,7 @@ import requests
 import json
 import ast
 import lxml.etree as etree
+from sklearn import neural_network
 
 
 #TODO deplacer cette fonction dans utils/xx.py
@@ -58,11 +59,26 @@ def get_entity(elt):
     return text, tokens, tag, parent
 
 
+def get_toponyms(elt):
+    toponyms = []
+    for elt in elt.findall('.//location/geo'):
+        parent = elt.getparent()
+        text = get_w_content(parent)
+        coords = elt.text.split()
+        source = elt.get('source') if 'source' in elt.attrib else  ""
+        rend = elt.get('rend') if 'rend' in elt.attrib else  ""
+        type = 'ne' if parent.tag == 'name' else  'nne'
+        toponyms.append(Toponym(text, coords[0], coords[1], source, rend, type))
+    return toponyms
+
+
+
 def get_entities(elt):
     entities = []
     for elt in elt.findall('.//name'):
         text, tokens, tag, parent = get_entity(elt)
-        entities.append(Entity(text, tokens, tag, parent))
+        toponyms = get_toponyms(elt)
+        entities.append(Entity(text, tokens, tag, parent, toponyms=toponyms))
     return entities
 
 
@@ -73,34 +89,51 @@ def get_nested_entities(elt):
         child = elt.xpath(".//*[self::rs or self::name]")[0]
         ne = get_entities(elt)
         #TODO get the nesting level
-        nestedEntities.append(Entity(text, tokens, tag, parent, child, ne, 1))
+        toponyms = get_toponyms(elt)
+        nestedEntities.append(Entity(text, tokens, tag, parent, child, ne, 1, toponyms=toponyms))
     return nestedEntities
 
 
 class Entity:
-    def __init__(self, text, tokens, tag, parent=None, child=None, ne=None, level=0, lat=None, lng=None):
+    def __init__(self, text, tokens, tag, parent=None, child=None, ne=None, level=0, toponyms=None):
 
         self.text = text
         self.tokens = tokens
         self.tag = tag
-
-        self.lat = lat
-        self.lng = lng
 
         self.parent = parent
         self.child = child
 
         self.level = level # find a better name?
         self.ne = ne
+
+        self.toponyms = toponyms
+
         #self.sent = sent # sentence in which the entity occurs, useful?
         #...
 
 
-# TODO
+    def print_toponyms(self):
+        if len(self.toponyms) == 0:
+            print(len(self.toponyms), 'location found!')
+        elif len(self.toponyms) == 1:
+            print(len(self.toponyms), 'location found:')
+        else : 
+            print(len(self.toponyms), 'location(s) found:')
+
+        for toponym in self.toponyms:
+            print(toponym.lat, toponym.lng, toponym.source, toponym.sourceName)
+
+
 class Toponym: 
-    def __init__(self, name):
+    def __init__(self, name, lat, lng, source, sourceName, type):
 
         self.name = name
+        self.lat = lat
+        self.lng = lng
+        self.source = source
+        self.sourceName = sourceName
+        self.type = type
 
 
 class Token:
@@ -135,16 +168,8 @@ class Perdido:
         
         self.tokens = get_tokens(root)
         self.ne = get_entities(root)
-        
-        for elt in root.findall(".//rs[@type='ene']/rs[@subtype='ene']"):
-            text = get_w_content(elt)
-            tag = elt.get('type') if 'type' in elt.attrib else  ""
-            tokens = get_tokens(elt)
-            parent = elt.getparent()
-            child = elt.xpath(".//*[self::rs or self::name]")[0]
-            ne = get_entities(elt)
-            #TODO get the nesting level
-            self.nne.append(Entity(text, tokens, tag, parent, child, ne, 1))
+        self.toponyms = get_toponyms(root)
+        self.nne = get_nested_entities(root)
 
         
 

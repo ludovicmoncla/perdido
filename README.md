@@ -20,34 +20,56 @@ pip install --upgrade perdido
 
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](http://colab.research.google.com/github/ludovicmoncla/perdido/blob/main/notebooks/demo_Geoparser.ipynb)
 
+### Import
 
 ```python
 from perdido import geoparser
+```
 
+### Run geoparser
+
+```python
 p = geoparser.Geoparser()
 doc = p.parse('Je visite la ville de Lyon, Annecy et le Mont-Blanc.')
+```
 
-print(' -- tokens -- ')
+### Print tokens
+
+```python
 for token in doc.tokens:
-    print(token.text, token.lemma, token.pos)
+    print("{0} {1} {2}".format(token.text, token.lemma, token.pos))
+```
 
-print(' -- tei -- ')
-doc.tei
+### Print tokens
 
-print(' -- geojson -- ')
-doc.geojson
+```python
+print(doc.tei)
+```
 
-print(' -- named entities -- ')
+### Print tokens
+
+```python
+print(doc.geojson)
+```
+
+### Print tokens
+
+```python
 for entity in doc.ne:
-    print(entity.text, '[' + entity.tag + ']')
+    print("{0} --> {1}".format(entity.text, entity.tag))
     if entity.tag == 'place':
-        entity.print_toponyms()
+        for t in entity.toponyms:
+            print("{0} {1} - {2}".format(t.lat, t.lng, t.source))
+```
 
-print(' -- nested named entities -- ')
+### Print tokens
+
+```python
 for nestedEntity in doc.nne:
-    print(nestedEntity.text, '[' + nestedEntity.tag + ']')
+    print("{0} --> {1}".format(nestedEntity.text, nestedEntity.tag))
     if nestedEntity.tag == 'place':
-        nestedEntity.print_toponyms()
+        for t in nestedEntity.toponyms:
+            print("{0} {1} - {2}".format(t.lat, t.lng, t.source))
 ```
 
 

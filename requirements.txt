@@ -1,3 +1,5 @@
 requests
 folium
 lxml
+geojson
+gpxpy

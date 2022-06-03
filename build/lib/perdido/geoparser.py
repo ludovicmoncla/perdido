@@ -2,18 +2,22 @@ import requests
 import json
 import ast
 import lxml.etree as etree
-from sklearn import neural_network
-
+import folium
+import geojson
+import gpxpy
+from io import StringIO
 
 #TODO deplacer cette fonction dans utils/xx.py
 def getResult(jsonStr, field='result', outputFormat='json'):
     if json.loads(jsonStr.text)['status'] == "success":
-        if outputFormat == 'html':
-            return ast.literal_eval(json.dumps(json.loads(jsonStr.text)[field]))
-        elif outputFormat == 'xml':
-            return  etree.tostring(etree.XML(json.loads(jsonStr.text)[field]), pretty_print=True)
+        if outputFormat == 'xml':
+            parser = etree.XMLParser(ns_clean=True, remove_blank_text=True)
+            return etree.tostring(etree.parse(StringIO(json.loads(jsonStr.text)[field]), parser), pretty_print=True, method="html").decode('utf-8')
+            #return ast.literal_eval(json.dumps())
+        #elif outputFormat == 'xml':
+        #    return  etree.tostring(etree.XML(json.loads(jsonStr.text)[field]), pretty_print=True)
         else:
-            return json.dumps(json.loads(jsonStr.text)[field])
+            return json.loads(json.loads(jsonStr.text)[field])
     else:
         return None
 
@@ -94,6 +98,38 @@ def get_nested_entities(elt):
     return nestedEntities
 
 
+''' function get_bounding_box() returns a list containing the bottom left and the top right 
+    points in the sequence '''
+def get_bounding_box(points):
+    bot_left_x = min(point[1] for point in points)
+    bot_left_y = min(point[0] for point in points)
+    top_right_x = max(point[1] for point in points)
+    top_right_y = max(point[0] for point in points)
+    return [(bot_left_x, bot_left_y), (top_right_x, top_right_y)]
+
+
+#https://www.kaggle.com/code/paultimothymooney/overlay-gpx-route-on-osm-map-using-folium/notebook
+def overlayGPX(map, gpxData):
+    '''
+    overlay a gpx route on top of an OSM map using Folium
+    some portions of this function were adapted
+    from this post: https://stackoverflow.com/questions/54455657/
+    how-can-i-plot-a-map-using-latitude-and-longitude-data-in-python-highlight-few
+    '''
+    gpx_file = open(gpxData, 'r')
+    gpx = gpxpy.parse(gpx_file)
+    points = []
+    for track in gpx.tracks:
+        for segment in track.segments:        
+            for point in segment.points:
+                points.append(tuple([point.latitude, point.longitude]))
+    #latitude = sum(p[0] for p in points)/len(points)
+    #longitude = sum(p[1] for p in points)/len(points)
+    #myMap = folium.Map(location=[latitude,longitude],zoom_start=zoom)
+    folium.PolyLine(points, color="red", weight=2.5, opacity=1).add_to(map)
+    
+
+
 class Entity:
     def __init__(self, text, tokens, tag, parent=None, child=None, ne=None, level=0, toponyms=None):
 
@@ -170,8 +206,27 @@ class Perdido:
         self.ne = get_entities(root)
         self.toponyms = get_toponyms(root)
         self.nne = get_nested_entities(root)
-
         
+
+    def get_folium_map(self, properties=None, gpx=None):
+        m = folium.Map()
+        if gpx is not None:
+            overlayGPX(m, gpx)
+
+        coords = list(geojson.utils.coords(self.geojson))
+        if len(coords) > 0:
+            #print(str(len(coords))+" records found in gazetteer:")
+
+            m.fit_bounds(get_bounding_box(coords))
+            #folium.GeoJson(json_data, name='Toponyms', tooltip=folium.features.GeoJsonTooltip(fields=['id', 'name', 'source'], localize=True)).add_to(m)
+            if properties is not None:
+                folium.GeoJson(self.geojson, name='Toponyms', tooltip=folium.features.GeoJsonTooltip(fields=properties, localize=True)).add_to(m)
+            else:
+                folium.GeoJson(self.geojson, name='Toponyms').add_to(m)
+            return m
+        else:
+            #print("Sorry, no records found in gazetteer for geocoding!")
+            return None
 
     #TODO ajouter les méthodes de display
 
@@ -208,6 +263,7 @@ class Geoparser:
         
         res = Perdido()
         res.text = content
+
         res.tei = getResult(r, 'xml-tei', 'xml')
         res.geojson = getResult(r, 'geojson')
 

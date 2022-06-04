@@ -23,20 +23,20 @@ pip install --upgrade perdido
 ### Import
 
 ```python
-from perdido import geoparser
+from perdido.geoparser import Geoparser
 ```
 
 ### Run geoparser
 
 ```python
-p = geoparser.Geoparser()
-doc = p.parse('Je visite la ville de Lyon, Annecy et le Mont-Blanc.')
+geoparser = Geoparser()
+doc = geoparser('Je visite la ville de Lyon, Annecy et le Mont-Blanc.')
 ```
 
 ### Get tokens
 
 ```python
-for token in doc.tokens:
+for token in doc:
     print("{0} {1} {2}".format(token.text, token.lemma, token.pos))
 ```
 

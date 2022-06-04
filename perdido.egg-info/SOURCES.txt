@@ -5,7 +5,6 @@ setup.py
 perdido/__init__.py
 perdido/geocoder.py
 perdido/geoparser.py
-perdido/test_geoparser.py
 perdido.egg-info/PKG-INFO
 perdido.egg-info/SOURCES.txt
 perdido.egg-info/dependency_links.txt

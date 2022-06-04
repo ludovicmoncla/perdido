@@ -12,7 +12,7 @@ class Geoparser:
 
     """
 
-    def __init__(self, apiKey = "libPython", language='French', version='Standard'):
+    def __init__(self, apiKey = "libPython", language='French', version='Standard', sources = None):
         """
         Instanciate a geoparser
         TODO: Add the description...
@@ -24,13 +24,15 @@ class Geoparser:
         self._language = language
         self._apiKey = apiKey
         self._version = version
-        self._sources = {'ign' : False, 'osm' : True, 'geonames' : False, 'google' : False, 'wikiG' : False}
-
-
-    def parse(self, content, sources = None):
-
         if sources is not None:
-            self._sources = sources
+            self._sources = {'ign' : False, 'osm' : True, 'geonames' : False, 'google' : False, 'wikiG' : False}
+
+
+    def __call__(self, content):
+        self.parse(content)
+
+
+    def parse(self, content, ):
 
         ws = WebService()
 
@@ -67,6 +69,9 @@ class Perdido:
         self.toponyms = []
 
     
+    def __call__(self):
+        self.tokens
+
 
     def parseTEI(self):
         root = etree.fromstring(self.tei)

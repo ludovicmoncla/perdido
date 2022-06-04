@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: perdido
-Version: 0.0.8
+Version: 0.0.9
 Summary: PERDIDO Geoparser python library
 Home-page: https://github.com/ludovicmoncla/perdido
 Author: Ludovic Moncla
@@ -11,18 +11,19 @@ Classifier: Development Status :: 3 - Alpha
 Classifier: License :: OSI Approved :: BSD License
 Classifier: Operating System :: POSIX :: Other
 Classifier: Operating System :: MacOS
-Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.10
 Description-Content-Type: text/markdown
 License-File: LICENSE
 
 # Perdido Geoparser Python library
 
-[![PyPI](https://img.shields.io/pypi/v/perdido)](https://pypi.org/project/perdido)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](http://colab.research.google.com/github/ludovicmoncla/perdido/blob/main/notebooks/demo_Geoparser.ipynb)
+[![PyPI](https://img.shields.io/pypi/v/perdido)](https://pypi.org/project/perdido)
 [![PyPI - License](https://img.shields.io/pypi/l/perdido?color=yellow)](https://github.com/ludovicmoncla/perdido/blob/main/LICENSE)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/perdido)
+
 
 [http://erig.univ-pau.fr/PERDIDO/](http://erig.univ-pau.fr/PERDIDO/)
-
 
 
 ## Installation
@@ -40,20 +41,20 @@ pip install --upgrade perdido
 ### Import
 
 ```python
-from perdido import geoparser
+from perdido.geoparser import Geoparser
 ```
 
 ### Run geoparser
 
 ```python
-p = geoparser.Geoparser()
-doc = p.parse('Je visite la ville de Lyon, Annecy et le Mont-Blanc.')
+geoparser = Geoparser()
+doc = geoparser('Je visite la ville de Lyon, Annecy et le Mont-Blanc.')
 ```
 
 ### Get tokens
 
 ```python
-for token in doc.tokens:
+for token in doc:
     print("{0} {1} {2}".format(token.text, token.lemma, token.pos))
 ```
 

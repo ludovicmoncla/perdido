@@ -1,62 +1,17 @@
+from typing import Iterator
+
 import lxml.etree as etree
 import folium
 import geojson
+
 from perdido.utils.webservices import WebService
 from perdido.utils.xml import *
 from perdido.utils.map import *
 
 
-class Geoparser:
-    """
-    Geoparser Class -- Provides geotagging and geocoding methods.
-
-    """
-
-    def __init__(self, apiKey = "libPython", language='French', version='Standard', sources = None):
-        """
-        Instanciate a geoparser
-        TODO: Add the description...
-        :param version: Standard (default) or Encyclopedie
-        """
-        self._urlAPI = 'http://choucas.univ-pau.fr/PERDIDO/api/'
-        self._serviceGeoparsing = 'geoparsing'
-
-        self._language = language
-        self._apiKey = apiKey
-        self._version = version
-        if sources is not None:
-            self._sources = {'ign' : False, 'osm' : True, 'geonames' : False, 'google' : False, 'wikiG' : False}
-
-
-    def __call__(self, content):
-        return self.parse(content)
-
-
-    def parse(self, content):
-
-        ws = WebService()
-
-        #TODO il manque les parametres optionnels: sources, bbox...
-        parameters = {'api_key': self._apiKey, 'content': content, 'version': self._version}
-        ws.post(self._serviceGeoparsing, params=parameters)
-
-        res = Perdido()
-        res.text = content
-
-        res.tei = ws.getResult('xml-tei', 'xml')
-        res.geojson = ws.getResult('geojson')
-
-        #TODO ajouter l'appel à la méthode de Perdido qui va remplir les attributs 
-        res.parseTEI()
-
-        return res
-
-
-
-
 class Perdido:
 
-    def __init__(self):
+    def __init__(self) -> None:
 
         self.text = None
         self.tei = None  # type etree xml, string or both?
@@ -69,16 +24,16 @@ class Perdido:
         self.toponyms = []
 
 
-    def __iter__(self):
+    def __iter__(self) -> Iterator[Token]:
         for t in self.tokens:
             yield t
 
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.tokens)
 
 
-    def parseTEI(self):
+    def parse_tei(self) -> None:
         root = etree.fromstring(self.tei)
         
         self.tokens = get_tokens(root)
@@ -87,10 +42,10 @@ class Perdido:
         self.nne = get_nested_entities(root)
         
 
-    def get_folium_map(self, properties=None, gpx=None):
+    def get_folium_map(self, properties: list[str] | None = None, gpx: str | None = None) -> folium.Map | None:
         m = folium.Map()
         if gpx is not None:
-            overlayGPX(m, gpx)
+            overlay_gpx(m, gpx)
 
         coords = list(geojson.utils.coords(self.geojson))
         if len(coords) > 0:
@@ -108,3 +63,51 @@ class Perdido:
             return None
 
     #TODO ajouter les méthodes de display
+
+
+
+class Geoparser:
+    """
+    Geoparser Class -- Provides geotagging and geocoding methods.
+
+    """
+
+    def __init__(self, api_key: str = "libPython", language: str = 'French', version: str = 'Standard', sources: dict[str, bool] | None = None) -> None:
+        """
+        Instanciate a geoparser
+        TODO: Add the description...
+        :param version: Standard (default) or Encyclopedie
+        """
+        self._url_api = 'http://choucas.univ-pau.fr/PERDIDO/api/'
+        self._serviceGeoparsing = 'geoparsing'
+
+        self._language = language
+        self._api_key = api_key
+        self._version = version
+        if sources is not None:
+            self._sources = {'ign' : False, 'osm' : True, 'geonames' : False, 'google' : False, 'wikiG' : False}
+
+
+    def __call__(self, content: str) -> Perdido: 
+        return self.parse(content)
+
+
+    def parse(self, content: str) -> Perdido:
+
+        ws = WebService()
+
+        #TODO il manque les parametres optionnels: sources, bbox...
+        parameters = {'api_key': self._api_key, 'content': content, 'version': self._version}
+        ws.post(self._serviceGeoparsing, params=parameters)
+
+        res = Perdido()
+        res.text = content
+
+        res.tei = ws.get_result('xml-tei', 'xml')
+        res.geojson = ws.get_result('geojson')
+
+        #TODO ajouter l'appel à la méthode de Perdido qui va remplir les attributs 
+        res.parse_tei()
+
+        return res
+

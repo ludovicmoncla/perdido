@@ -4,7 +4,7 @@ import gpxpy
 
 ''' function get_bounding_box() returns a list containing the bottom left and the top right 
     points in the sequence '''
-def get_bounding_box(points):
+def get_bounding_box(points: list[float]) -> list[tuple[float, float], tuple[float, float]]:
     bot_left_x = min(point[1] for point in points)
     bot_left_y = min(point[0] for point in points)
     top_right_x = max(point[1] for point in points)
@@ -13,14 +13,14 @@ def get_bounding_box(points):
 
 
 #https://www.kaggle.com/code/paultimothymooney/overlay-gpx-route-on-osm-map-using-folium/notebook
-def overlayGPX(map, gpxData):
+def overlay_gpx(map: folium.Map, gpx_data:str) -> None:
     '''
     overlay a gpx route on top of an OSM map using Folium
     some portions of this function were adapted
     from this post: https://stackoverflow.com/questions/54455657/
     how-can-i-plot-a-map-using-latitude-and-longitude-data-in-python-highlight-few
     '''
-    gpx_file = open(gpxData, 'r')
+    gpx_file = open(gpx_data, 'r')
     gpx = gpxpy.parse(gpx_file)
     points = []
     for track in gpx.tracks:

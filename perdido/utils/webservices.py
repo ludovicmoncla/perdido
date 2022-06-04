@@ -1,24 +1,26 @@
+from typing import Any
 import json
-import lxml.etree as etree
+from lxml import etree
 from io import StringIO
 import requests
 
+
 class WebService():
 
-    def __init__(self, urlAPI = 'http://choucas.univ-pau.fr/PERDIDO/api/'):
-        self._urlAPI = urlAPI
+    def __init__(self, url_api: str = 'http://choucas.univ-pau.fr/PERDIDO/api/') -> None:
+        self._url_api = url_api
         self._parameters = None
         self.result = None
 
 
-    def post(self, service, params):
+    def post(self, service: str, params: dict[str, Any]) -> None:
         self._parameters = params
-        self.result = requests.post(self._urlAPI + service, params=self._parameters)
+        self.result = requests.post(self._url_api + service, params=self._parameters)
 
 
-    def getResult(self, field='result', outputFormat='json'):
+    def get_result(self, field: str = 'result', output_format: str = 'json') -> str | None:
         if json.loads(self.result.text)['status'] == "success":
-            if outputFormat == 'xml':
+            if output_format == 'xml':
                 parser = etree.XMLParser(ns_clean=True, remove_blank_text=True)
                 return etree.tostring(etree.parse(StringIO(json.loads(self.result.text)[field]), parser), pretty_print=True, method="html").decode('utf-8')
                 #return ast.literal_eval(json.dumps())

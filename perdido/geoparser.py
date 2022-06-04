@@ -29,15 +29,15 @@ class Geoparser:
 
 
     def __call__(self, content):
-        self.parse(content)
+        return self.parse(content)
 
 
-    def parse(self, content, ):
+    def parse(self, content):
 
         ws = WebService()
 
-        #TODO il manque les parametres optionnels
-        parameters = {'api_key': self._apiKey, 'content': content}
+        #TODO il manque les parametres optionnels: sources, bbox...
+        parameters = {'api_key': self._apiKey, 'content': content, 'version': self._version}
         ws.post(self._serviceGeoparsing, params=parameters)
 
         res = Perdido()
@@ -68,9 +68,14 @@ class Perdido:
 
         self.toponyms = []
 
-    
-    def __call__(self):
-        self.tokens
+
+    def __iter__(self):
+        for t in self.tokens:
+            yield t
+
+
+    def __len__(self):
+        return len(self.tokens)
 
 
     def parseTEI(self):

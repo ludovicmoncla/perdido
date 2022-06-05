@@ -70,7 +70,7 @@ for entity in doc.ne:
 
 ```python
 for nestedEntity in doc.nne:
-    print(f'entity: {entity.text}\ttag: {entity.tag}')
+    print(f'entity: {nestedEntity.text}\ttag: {nestedEntity.tag}')
     if nestedEntity.tag == 'place':
         for t in nestedEntity.toponyms:
             print(f' latitude: {t.lat}\tlongitude: {t.lng}\tsource {t.source}')

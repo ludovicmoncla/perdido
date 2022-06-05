@@ -19,6 +19,7 @@ class WebService():
 
 
     def get_result(self, field: str = 'result', output_format: str = 'json') -> str | None:
+        
         if json.loads(self.result.text)['status'] == "success":
             if output_format == 'xml':
                 parser = etree.XMLParser(ns_clean=True, remove_blank_text=True)
@@ -31,3 +32,4 @@ class WebService():
         else:
             return None
 
+        # TODO: add exceptions, example : json.decoder.JSONDecodeError

@@ -75,7 +75,10 @@ class Geoparser:
         self.version = version
 
         if sources is not None:
-            self.sources = {'osm' : True, 'ign' : False, 'geonames' : False, 'wikiG' : False}
+            self.sources = sources
+        else:
+            self.sources = {'osm' : True}
+            
 
         self.max_records = max_records
         self.alt_names = alt_names

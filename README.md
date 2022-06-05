@@ -19,41 +19,44 @@ pip install --upgrade perdido
 
 ## Quick start
 
+
+### Geoparsing
+
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](http://colab.research.google.com/github/ludovicmoncla/perdido/blob/main/notebooks/demo_Geoparser.ipynb)
 
-### Import
+#### Import
 
 ```python
 from perdido.geoparser import Geoparser
 ```
 
-### Run geoparser
+#### Run geoparser
 
 ```python
 geoparser = Geoparser(lang='fr')
 doc = geoparser('Je visite la ville de Lyon, Annecy et le Mont-Blanc.')
 ```
 
-### Get tokens
+#### Get tokens
 
 ```python
 for token in doc:
     print(f'token: {token.text}\tlemma: {token.lemma}\tpos: {token.pos}')
 ```
 
-### Print the XML-TEI output
+#### Print the XML-TEI output
 
 ```python
 print(doc.tei)
 ```
 
-### Print the GeoJSON output
+#### Print the GeoJSON output
 
 ```python
 print(doc.geojson)
 ```
 
-### Get the list of named entities
+#### Get the list of named entities
 
 ```python
 for entity in doc.ne:
@@ -63,7 +66,7 @@ for entity in doc.ne:
             print(f' latitude: {t.lat}\tlongitude: {t.lng}\tsource {t.source}')
 ```
 
-### Get the list of nested named entities
+#### Get the list of nested named entities
 
 ```python
 for nestedEntity in doc.nne:

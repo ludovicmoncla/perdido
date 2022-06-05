@@ -30,7 +30,7 @@ from perdido.geoparser import Geoparser
 ### Run geoparser
 
 ```python
-geoparser = Geoparser()
+geoparser = Geoparser(lang='fr')
 doc = geoparser('Je visite la ville de Lyon, Annecy et le Mont-Blanc.')
 ```
 
@@ -38,7 +38,7 @@ doc = geoparser('Je visite la ville de Lyon, Annecy et le Mont-Blanc.')
 
 ```python
 for token in doc:
-    print("{0} {1} {2}".format(token.text, token.lemma, token.pos))
+    print(f'token: {token.text}\tlemma: {token.lemma}\tpos: {token.pos}')
 ```
 
 ### Print the XML-TEI output
@@ -57,20 +57,20 @@ print(doc.geojson)
 
 ```python
 for entity in doc.ne:
-    print("{0} --> {1}".format(entity.text, entity.tag))
+    print(f'entity: {entity.text}\ttag: {entity.tag}')
     if entity.tag == 'place':
         for t in entity.toponyms:
-            print("{0} {1} - {2}".format(t.lat, t.lng, t.source))
+            print(f' latitude: {t.lat}\tlongitude: {t.lng}\tsource {t.source}')
 ```
 
 ### Get the list of nested named entities
 
 ```python
 for nestedEntity in doc.nne:
-    print("{0} --> {1}".format(nestedEntity.text, nestedEntity.tag))
+    print(f'entity: {entity.text}\ttag: {entity.tag}')
     if nestedEntity.tag == 'place':
         for t in nestedEntity.toponyms:
-            print("{0} {1} - {2}".format(t.lat, t.lng, t.source))
+            print(f' latitude: {t.lat}\tlongitude: {t.lng}\tsource {t.source}')
 ```
 
 

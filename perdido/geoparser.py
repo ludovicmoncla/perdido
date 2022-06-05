@@ -72,7 +72,7 @@ class Geoparser:
 
     """
 
-    def __init__(self, api_key: str = "libPython", language: str = 'French', version: str = 'Standard', sources: dict[str, bool] | None = None) -> None:
+    def __init__(self, api_key: str = "libPython", lang: str = 'fr', version: str = 'Standard', sources: dict[str, bool] | None = None) -> None:
         """
         Instanciate a geoparser
         TODO: Add the description...
@@ -81,7 +81,7 @@ class Geoparser:
         self._url_api = 'http://choucas.univ-pau.fr/PERDIDO/api/'
         self._serviceGeoparsing = 'geoparsing'
 
-        self._language = language
+        self._lang = lang
         self._api_key = api_key
         self._version = version
         if sources is not None:

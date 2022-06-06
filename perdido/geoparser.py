@@ -99,10 +99,14 @@ class Geoparser:
 
         ws = WebService()
 
-        parameters = {'api_key': self.api_key, 'content': content, 'lang': self.lang, 'version': self.version, 'max_rows': self.max_rows, 'alt_names': self.alt_names, 'country_code': self.country_code}
+        parameters = {'api_key': self.api_key, 'content': content, 'lang': self.lang, 'version': self.version, 'max_rows': self.max_rows, 'alt_names': self.alt_names}
         parameters.update(self.sources)
         if self.bbox is not None:
             parameters.update(self.bbox)
+        print(self.country_code)
+
+        if self.country_code is not None:
+            parameters['country_code'] = self.country_code
 
         ws.post(self.serviceGeoparsing, params=parameters)
 

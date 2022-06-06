@@ -34,7 +34,7 @@ from perdido.geoparser import Geoparser
 
 ```python
 geoparser = Geoparser(lang='fr')
-doc = geoparser('Je visite la ville de Lyon, Annecy et le Mont-Blanc.')
+doc = geoparser('Je visite la ville de Lyon, Annecy et Chamonix.')
 ```
 
 #### Get tokens

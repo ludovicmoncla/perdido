@@ -18,18 +18,21 @@ class WebService():
         self.result = requests.post(self._url_api + service, params=self._parameters)
 
 
-    def get_result(self, field: str = 'result', output_format: str = 'json') -> str | None:
+    def get_result(self, field: str = 'result', output_format: str = 'json') -> tuple[bool, str] | None:
         
-        if json.loads(self.result.text)['status'] == "success":
-            if output_format == 'xml':
-                parser = etree.XMLParser(ns_clean=True, remove_blank_text=True)
-                return etree.tostring(etree.parse(StringIO(json.loads(self.result.text)[field]), parser), pretty_print=True, method="html").decode('utf-8')
-                #return ast.literal_eval(json.dumps())
-            #elif outputFormat == 'xml':
-            #    return  etree.tostring(etree.XML(json.loads(jsonStr.text)[field]), pretty_print=True)
+        try :
+            if json.loads(self.result.text)['status'] == "success":
+                if output_format == 'xml':
+                    parser = etree.XMLParser(ns_clean=True, remove_blank_text=True)
+                    return True, etree.tostring(etree.parse(StringIO(json.loads(self.result.text)[field]), parser), pretty_print=True, method="html").decode('utf-8')
+                    #return ast.literal_eval(json.dumps())
+                #elif outputFormat == 'xml':
+                #    return  etree.tostring(etree.XML(json.loads(jsonStr.text)[field]), pretty_print=True)
+                else:
+                    return True, json.loads(json.loads(self.result.text)[field])
+            elif json.loads(self.result.text)['status'] == "failure":
+                return False, json.loads(self.result.text)['message']
             else:
-                return json.loads(json.loads(self.result.text)[field])
-        else:
-            return None
-
-        # TODO: add exceptions, example : json.decoder.JSONDecodeError
+                return False, 'Oops! An error occured.'
+        except json.decoder.JSONDecodeError:
+            return False, 'Oops! An error occured: '+ self.result.text

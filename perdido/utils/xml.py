@@ -1,5 +1,5 @@
 
-from typing import Any
+from typing import Any, List, Tuple
 from lxml.etree import Element
 
 
@@ -33,7 +33,7 @@ class Token:
 
 
 class Entity:
-    def __init__(self, text: str, tokens: list[Token], tag: str, parent: Any = None, child: Any = None, ne: Any = None, level: int = 0, toponyms: list[Toponym] = []) -> None:
+    def __init__(self, text: str, tokens: List[Token], tag: str, parent: Any = None, child: Any = None, ne: Any = None, level: int = 0, toponyms: List[Toponym] = []) -> None:
 
         self.text = text
         self.tokens = tokens
@@ -78,7 +78,7 @@ def parent_exists(elt: Element, parent_name: Element) -> bool:
         return False
 
 
-def get_tokens(elt: Element) -> list[Token]:
+def get_tokens(elt: Element) -> List[Token]:
     tokens = []
     for elt in elt.findall('.//w'):
         lemma = elt.get('lemma') if 'lemma' in elt.attrib else  ""
@@ -87,7 +87,7 @@ def get_tokens(elt: Element) -> list[Token]:
     return tokens
 
 
-def get_entity(elt: Element) -> tuple[str, list[Token], str, Element]:
+def get_entity(elt: Element) -> Tuple[str, List[Token], str, Element]:
     text = get_w_content(elt)
     tag = elt.get('type') if 'type' in elt.attrib else  ""
     tokens = get_tokens(elt)
@@ -96,7 +96,7 @@ def get_entity(elt: Element) -> tuple[str, list[Token], str, Element]:
     return text, tokens, tag, parent
 
 
-def get_toponyms(elt: Element) -> list[Toponym]:
+def get_toponyms(elt: Element) -> List[Toponym]:
     toponyms = []
     for elt in elt.findall('.//location/geo'):
         parent = elt.getparent()
@@ -109,7 +109,7 @@ def get_toponyms(elt: Element) -> list[Toponym]:
     return toponyms
 
 
-def get_entities(elt: Element) -> list[Entity]:
+def get_entities(elt: Element) -> List[Entity]:
     entities = []
     for elt in elt.findall('.//name'):
         text, tokens, tag, parent = get_entity(elt)
@@ -118,7 +118,7 @@ def get_entities(elt: Element) -> list[Entity]:
     return entities
 
 
-def get_nested_entities(elt: Element) -> list[Entity]:
+def get_nested_entities(elt: Element) -> List[Entity]:
     nestedEntities = []
     for elt in elt.findall(".//rs[@type='ene']/rs[@subtype='ene']"):
         text, tokens, tag, parent = get_entity(elt)

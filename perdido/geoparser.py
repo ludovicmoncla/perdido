@@ -1,4 +1,4 @@
-from typing import Iterator
+from typing import Iterator, List, Dict
 
 import lxml.etree as etree
 import folium
@@ -65,8 +65,8 @@ class Perdido:
 class Geoparser:
 
 
-    def __init__(self, api_key: str = "libPython", lang: str = 'fr', version: str = 'Standard', sources: dict[str, bool] | None = None, 
-                max_rows: int | None = None, alt_names: bool | None = None, bbox: list[float] | None = None, country_code: str | None = None) -> None:
+    def __init__(self, api_key: str = "libPython", lang: str = 'fr', version: str = 'Standard', sources: Dict[str, bool] | None = None, 
+                max_rows: int | None = None, alt_names: bool | None = None, bbox: List[float] | None = None, country_code: str | None = None) -> None:
 
         self.url_api = 'http://choucas.univ-pau.fr/PERDIDO/api/'
         self.serviceGeoparsing = 'geoparsing'

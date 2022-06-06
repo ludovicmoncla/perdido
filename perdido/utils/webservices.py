@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Dict, Tuple
 import json
 from lxml import etree
 from io import StringIO
@@ -13,12 +13,12 @@ class WebService():
         self.result = None
 
 
-    def post(self, service: str, params: dict[str, Any]) -> None:
+    def post(self, service: str, params: Dict[str, Any]) -> None:
         self._parameters = params
         self.result = requests.post(self._url_api + service, params=self._parameters)
 
 
-    def get_result(self, field: str = 'result', output_format: str = 'json') -> tuple[bool, str] | None:
+    def get_result(self, field: str = 'result', output_format: str = 'json') -> Tuple[bool, str] | None:
         
         try :
             if json.loads(self.result.text)['status'] == "success":

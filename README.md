@@ -1,9 +1,13 @@
 # Perdido Geoparser Python library
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](http://colab.research.google.com/github/ludovicmoncla/perdido/blob/main/notebooks/demo_Geoparser.ipynb)
+
 [![PyPI](https://img.shields.io/pypi/v/perdido)](https://pypi.org/project/perdido)
 [![PyPI - License](https://img.shields.io/pypi/l/perdido?color=yellow)](https://github.com/ludovicmoncla/perdido/blob/main/LICENSE)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/perdido)
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ludovicmoncla/perdido/main?labpath=notebooks%2Fdemo_Geoparser.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](http://colab.research.google.com/github/ludovicmoncla/perdido/blob/main/notebooks/demo_Geoparser.ipynb)
+
 
 
 [http://erig.univ-pau.fr/PERDIDO/](http://erig.univ-pau.fr/PERDIDO/)
@@ -22,6 +26,7 @@ pip install --upgrade perdido
 
 ### Geoparsing
 
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ludovicmoncla/perdido/main?labpath=notebooks%2Fdemo_Geoparser.ipynb)
 [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](http://colab.research.google.com/github/ludovicmoncla/perdido/blob/main/notebooks/demo_Geoparser.ipynb)
 
 #### Import

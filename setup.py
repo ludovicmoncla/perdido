@@ -33,7 +33,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setuptools.setup(
     name='perdido',
-    version='0.0.9',
+    version='0.1.1',
     license='BSD-Clause-2',
     author='Ludovic Moncla',
     author_email='moncla.ludovic@gmail.com',
@@ -55,7 +55,7 @@ setuptools.setup(
          'Operating System :: POSIX :: Other',
          'Operating System :: MacOS',
 
-         'Programming Language :: Python :: 3.10',
+         'Programming Language :: Python :: 3',
     ],
     keywords='geoparsing named-entity-recognition geographic-information-retrieval toponym-resolution toponym-disambiguation',
     install_requires=get_requirements(),

@@ -1,5 +1,5 @@
 
-from typing import Any, List, Tuple
+from typing import Any, List, Tuple, Union
 from lxml.etree import Element
 
 
@@ -19,7 +19,7 @@ class Toponym:
 
 
 class Token:
-    def __init__(self, text: str, lemma: str | None = None, pos: str | None = None) -> None:
+    def __init__(self, text: str, lemma: Union[str, None] = None, pos: Union[str, None] = None) -> None:
 
         self.text = text
         self.lemma = lemma

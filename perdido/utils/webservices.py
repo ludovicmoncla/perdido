@@ -1,4 +1,4 @@
-from typing import Any, Dict, Tuple
+from typing import Any, Dict, Tuple, Union
 import json
 from lxml import etree
 from io import StringIO
@@ -18,7 +18,7 @@ class WebService():
         self.result = requests.post(self._url_api + service, params=self._parameters)
 
 
-    def get_result(self, field: str = 'result', output_format: str = 'json') -> Tuple[bool, str] | None:
+    def get_result(self, field: str = 'result', output_format: str = 'json') -> Union[Tuple[bool, str], None]:
         
         try :
             if json.loads(self.result.text)['status'] == "success":

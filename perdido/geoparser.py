@@ -1,4 +1,4 @@
-from typing import Iterator, List, Dict
+from typing import Iterator, List, Dict, Union
 
 import lxml.etree as etree
 import folium
@@ -45,7 +45,7 @@ class Perdido:
             self.nne = get_nested_entities(root)
         
 
-    def get_folium_map(self, properties: list[str] | None = None, gpx: str | None = None) -> folium.Map | None:
+    def get_folium_map(self, properties: Union[List[str], None] = None, gpx: Union[str , None] = None) -> Union[folium.Map,None]:
         m = folium.Map()
         if gpx is not None:
             overlay_gpx(m, gpx)
@@ -65,8 +65,8 @@ class Perdido:
 class Geoparser:
 
 
-    def __init__(self, api_key: str = "libPython", lang: str = 'fr', version: str = 'Standard', sources: Dict[str, bool] | None = None, 
-                max_rows: int | None = None, alt_names: bool | None = None, bbox: List[float] | None = None, country_code: str | None = None) -> None:
+    def __init__(self, api_key: str = "libPython", lang: str = 'fr', version: str = 'Standard', sources: Union[Dict[str, bool], None] = None, 
+                max_rows: Union[int, None] = None, alt_names: Union[bool, None] = None, bbox: Union[List[float], None] = None, country_code: Union[str, None] = None) -> None:
 
         self.url_api = 'http://choucas.univ-pau.fr/PERDIDO/api/'
         self.serviceGeoparsing = 'geoparsing'

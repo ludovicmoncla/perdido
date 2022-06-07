@@ -5,7 +5,7 @@ import gpxpy
 
 ''' function get_bounding_box() returns a list containing the bottom left and the top right 
     points in the sequence '''
-def get_bounding_box(points: list[float]) -> List[Tuple[float, float], tuple[float, float]]:
+def get_bounding_box(points: List[float]) -> List[Tuple[float, float]]:
     bot_left_x = min(point[1] for point in points)
     bot_left_y = min(point[0] for point in points)
     top_right_x = max(point[1] for point in points)

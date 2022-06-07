@@ -103,8 +103,7 @@ class Geoparser:
         parameters.update(self.sources)
         if self.bbox is not None:
             parameters.update(self.bbox)
-        print(self.country_code)
-
+   
         if self.country_code is not None:
             parameters['country_code'] = self.country_code
 

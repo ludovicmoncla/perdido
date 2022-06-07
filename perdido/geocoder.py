@@ -1,6 +1,6 @@
 from typing import Iterator, List, Dict, Union
 from perdido.utils.webservices import WebService
-from perdido import Perdido
+from perdido.perdido import Perdido
 
 
 class Geocoder:

@@ -5,7 +5,7 @@ import folium
 import geojson
 
 from perdido.utils.webservices import WebService
-from perdido import Perdido
+from perdido.perdido import Perdido
 
 class Geoparser:
 

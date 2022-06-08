@@ -5,9 +5,6 @@
 [![PyPI - License](https://img.shields.io/pypi/l/perdido?color=yellow)](https://github.com/ludovicmoncla/perdido/blob/main/LICENSE)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/perdido)
 
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ludovicmoncla/perdido/main?labpath=notebooks%2Fdemo_Geoparser.ipynb)
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](http://colab.research.google.com/github/ludovicmoncla/perdido/blob/main/notebooks/demo_Geoparser.ipynb)
-
 
 
 [http://erig.univ-pau.fr/PERDIDO/](http://erig.univ-pau.fr/PERDIDO/)
@@ -80,6 +77,51 @@ for nestedEntity in doc.nne:
         for t in nestedEntity.toponyms:
             print(f' latitude: {t.lat}\tlongitude: {t.lng}\tsource {t.source}')
 ```
+
+
+
+
+### Geocoding
+
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ludovicmoncla/perdido/main?labpath=notebooks%2Fdemo_Geocoder.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](http://colab.research.google.com/github/ludovicmoncla/perdido/blob/main/notebooks/demo_Geocoder.ipynb)
+
+#### Import
+
+```python
+from perdido.geocoder import Geocoder
+```
+
+#### Geocode a single place name
+
+```python
+geocoder = Geocoder()
+doc = geocoder('Lyon')
+```
+
+#### Geocode a list of place names
+
+```python
+geocoder = Geocoder()
+doc = geocoder(['Lyon', 'Annecy', 'Chamonix'])
+```
+
+#### Get the geojson result
+
+```python
+print(doc.geojson)
+```
+
+#### Get the list of toponym candidates
+
+```python
+for t in doc.toponyms: 
+    print(f'lat: {t.lat}\tlng: {t.lng}\tsource {t.source}\tsourceName {t.source_name}')
+```
+
+
+
+
 
 
 

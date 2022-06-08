@@ -5,7 +5,7 @@ import folium
 import geojson
 
 from perdido.utils.xml import Token
-from perdido.utils.xml import get_tokens, get_entities, get_toponyms, get_nested_entities
+from perdido.utils.xml import get_tokens_from_tei, get_entities_from_tei, get_toponyms_from_tei, get_nested_entities_from_tei
 from perdido.utils.map import overlay_gpx, get_bounding_box
 
 
@@ -16,7 +16,7 @@ class Perdido:
 
         self.text = None
         self.tei = None
-        self.geojson = None
+        self.geojson = None  # geojson.FeatureCollection?
         
         self.ne = []
         self.nne = [] # nested named entities
@@ -38,11 +38,17 @@ class Perdido:
         if self.tei is not None:
             root = etree.fromstring(self.tei)
             
-            self.tokens = get_tokens(root)
-            self.ne = get_entities(root)
-            self.toponyms = get_toponyms(root)
-            self.nne = get_nested_entities(root)
-        
+            self.tokens = get_tokens_from_tei(root)
+            self.ne = get_entities_from_tei(root)
+            self.toponyms = get_toponyms_from_tei(root) 
+            self.nne = get_nested_entities_from_tei(root)
+
+
+    def parse_geojson(self) -> None:
+        if self.geojson is not None:
+           
+            self.toponyms = get_toponyms_from_tei(self.geojson)  
+           
 
     def get_folium_map(self, properties: Union[List[str], None] = None, gpx: Union[str , None] = None) -> Union[folium.Map,None]:
         m = folium.Map()

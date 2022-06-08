@@ -4,17 +4,17 @@ from lxml.etree import Element
 
 
 class Toponym: 
-    def __init__(self, name: str, lat: float, lng: float, source: str, sourceName: str, type: str) -> None:
+    def __init__(self, name: str, lat: float, lng: float, source: str, source_name: str, type: str) -> None:
 
         self.name = name
         self.lat = lat
         self.lng = lng
         self.source = source
-        self.sourceName = sourceName
+        self.source_name = source_name
         self.type = type
     
     def __str__(self) -> str: 
-        return self.name + " " + str(self.lat) + " " + str(self.lng) + " " + self.source + " " + self.sourceName
+        return self.name + " " + str(self.lat) + " " + str(self.lng) + " " + self.source + " " + self.source_name
 
 
 class Token:
@@ -118,12 +118,12 @@ def get_toponyms_from_geojson(json_content: Any) -> List[Toponym]:
         lat = feature['geometry']['coordinates'][0]
         lng = feature['geometry']['coordinates'][1]
         name = feature['properties']['name']
-        rend = feature['properties']['sourceName']
+        source_name = feature['properties']['sourceName']
         source = feature['properties']['source']
         name = feature['properties']['name']
         type = 'ne'
 
-        toponyms.append(Toponym(name, lat, lng, source, rend, type))
+        toponyms.append(Toponym(name, lat, lng, source, source_name, type))
     return toponyms
 
 

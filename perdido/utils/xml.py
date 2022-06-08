@@ -3,7 +3,6 @@ from typing import Any, List, Tuple, Union
 from lxml.etree import Element
 
 
-
 class Toponym: 
     def __init__(self, name: str, lat: float, lng: float, source: str, sourceName: str, type: str) -> None:
 
@@ -15,7 +14,7 @@ class Toponym:
         self.type = type
     
     def __str__(self) -> str: 
-        return self.name + " " + self.lat + " " + self.lng + " " + self.source + " " + self.sourceName
+        return self.name + " " + str(self.lat) + " " + str(self.lng) + " " + self.source + " " + self.sourceName
 
 
 class Token:
@@ -24,6 +23,8 @@ class Token:
         self.text = text
         self.lemma = lemma
         self.pos = pos
+
+        # tag BIO NE and NNE ?
 
         # position, start, end ?
         
@@ -78,7 +79,7 @@ def parent_exists(elt: Element, parent_name: Element) -> bool:
         return False
 
 
-def get_tokens(elt: Element) -> List[Token]:
+def get_tokens_from_tei(elt: Element) -> List[Token]:
     tokens = []
     for elt in elt.findall('.//w'):
         lemma = elt.get('lemma') if 'lemma' in elt.attrib else  ""
@@ -90,13 +91,13 @@ def get_tokens(elt: Element) -> List[Token]:
 def get_entity(elt: Element) -> Tuple[str, List[Token], str, Element]:
     text = get_w_content(elt)
     tag = elt.get('type') if 'type' in elt.attrib else  ""
-    tokens = get_tokens(elt)
+    tokens = get_tokens_from_tei(elt)
     parent = elt.getparent()
     #TODO get and return lat/lng if it is a place
     return text, tokens, tag, parent
 
 
-def get_toponyms(elt: Element) -> List[Toponym]:
+def get_toponyms_from_tei(elt: Element) -> List[Toponym]:
     toponyms = []
     for elt in elt.findall('.//location/geo'):
         parent = elt.getparent()
@@ -109,23 +110,40 @@ def get_toponyms(elt: Element) -> List[Toponym]:
     return toponyms
 
 
-def get_entities(elt: Element) -> List[Entity]:
+def get_toponyms_from_geojson(json_content: Any) -> List[Toponym]:
+    toponyms = []
+
+    for feature in json_content['features']:
+
+        lat = feature['geometry']['coordinates'][0]
+        lng = feature['geometry']['coordinates'][1]
+        name = feature['properties']['name']
+        rend = feature['properties']['sourceName']
+        source = feature['properties']['source']
+        name = feature['properties']['name']
+        type = 'ne'
+
+        toponyms.append(Toponym(name, lat, lng, source, rend, type))
+    return toponyms
+
+
+def get_entities_from_tei(elt: Element) -> List[Entity]:
     entities = []
     for elt in elt.findall('.//name'):
         text, tokens, tag, parent = get_entity(elt)
-        toponyms = get_toponyms(elt)
+        toponyms = get_toponyms_from_tei(elt)
         entities.append(Entity(text, tokens, tag, parent, toponyms=toponyms))
     return entities
 
 
-def get_nested_entities(elt: Element) -> List[Entity]:
+def get_nested_entities_from_tei(elt: Element) -> List[Entity]:
     nestedEntities = []
     for elt in elt.findall(".//rs[@type='ene']/rs[@subtype='ene']"):
         text, tokens, tag, parent = get_entity(elt)
         child = elt.xpath(".//*[self::rs or self::name]")[0]
-        ne = get_entities(elt)
+        ne = get_entities_from_tei(elt)
         #TODO get the nesting level
-        toponyms = get_toponyms(elt)
+        toponyms = get_toponyms_from_tei(elt)
         nestedEntities.append(Entity(text, tokens, tag, parent, child, ne, 1, toponyms=toponyms))
     return nestedEntities
 

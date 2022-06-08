@@ -64,5 +64,6 @@ class Geocoder:
             print(val)
 
         # TODO:    res.toponyms
-        
+        res.parse_geojson()
+
         return res

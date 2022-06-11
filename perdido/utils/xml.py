@@ -1,5 +1,3 @@
-
-from ctypes.wintypes import tagSIZE
 from typing import Any, List, Tuple, Union
 from lxml.etree import Element
 

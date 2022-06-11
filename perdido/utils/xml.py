@@ -1,4 +1,5 @@
 
+from ctypes.wintypes import tagSIZE
 from typing import Any, List, Tuple, Union
 from lxml.etree import Element
 
@@ -18,29 +19,55 @@ class Toponym:
 
 
 class Token:
-    def __init__(self, text: str, lemma: Union[str, None] = None, pos: Union[str, None] = None) -> None:
-
+    def __init__(self, id: str, text: str, lemma: Union[str, None] = None, pos: Union[str, None] = None, tags: List[str] = []) -> None:
+        self.id = id
         self.text = text
         self.lemma = lemma
         self.pos = pos
+        self.tags = tags
 
-        # tag BIO NE and NNE ?
+        # tag CONLL-U / BIO NE and NNE ?
 
-        # position, start, end ?
-        
+          
     def __str__(self) -> str: 
-        return self.text + " " + self.lemma + " " + self.pos
+        return self.tsv_format()
 
+
+    def tsv_format(self) -> str:
+        if len(self.tags) > 0:
+            tags = '\t'.join(self.tags)
+            return f'{self.id+1}\t{self.text}\t{self.lemma}\t{self.pos}\t{tags}'
+        else:
+            return f'{self.id+1}\t{self.text}\t{self.lemma}\t{self.pos}'
+
+
+    def iob_format(self) -> str:
+        if len(self.tags) > 0:
+            tags = ' '.join(self.tags)
+            return f'{self.text} {self.lemma} {self.pos} {tags}'
+        else:
+            return f'{self.text} {self.lemma} {self.pos}'
+
+
+    def n_tagged_format(self) -> str:
+        if len(self.tags) > 0:
+            return '__{' + self.text + '}__[' + self.tags[0] + ']'
+        else:
+            return self.text
 
 
 class Entity:
-    def __init__(self, text: str, tokens: List[Token], tag: str, parent: Any = None, child: Any = None, ne: Any = None, level: int = 0, toponyms: List[Toponym] = []) -> None:
+    def __init__(self, text: str, tokens: List[Token], tag: str, start: str, end: str, parent: Any = None, child: Any = None, ne: Any = None, level: int = 0, toponyms: List[Toponym] = []) -> None:
 
         self.text = text
         self.tokens = tokens
         self.tag = tag
 
-        self.parent = parent
+        self.id = id # tei xml id
+        self.start = start # attritbut startT des elements <rs>
+        self.end = end
+
+        self.parent = parent # seulement le parent, ou la liste des parents ?
         self.child = child
 
         self.level = level # find a better name?
@@ -48,6 +75,7 @@ class Entity:
 
         self.toponyms = toponyms
 
+      # position, start, end ?
         #self.sent = sent # sentence in which the entity occurs, useful?
         #...
 
@@ -82,19 +110,73 @@ def parent_exists(elt: Element, parent_name: Element) -> bool:
 def get_tokens_from_tei(elt: Element) -> List[Token]:
     tokens = []
     for elt in elt.findall('.//w'):
-        lemma = elt.get('lemma') if 'lemma' in elt.attrib else  ""
-        pos = elt.get('type') if 'type' in elt.attrib else  ""
-        tokens.append(Token(elt.text, lemma, pos))
+        lemma = elt.get('lemma') if 'lemma' in elt.attrib else ""
+        pos = elt.get('type') if 'type' in elt.attrib else ""
+
+        id = int(elt.get('id')[1:]) if 'id' in elt.attrib else None
+
+        tags = []
+    
+        try: 
+            p = elt
+            while True:
+             
+                p = next(p.iterancestors())
+                
+                if p.tag in ['rs']: # term | phr?
+                    
+                    # si l'id de w est le meme que startT alors B- sinon I- 
+                   
+                    startT = int(p.get('startT')) if 'startT' in p.attrib else None
+                    if startT is not None and id is not None:
+                    
+                        if startT == id:
+                            tag = 'B-'
+                        else:
+                            tag = 'I-'
+
+                        type = p.get('type') if 'type' in p.attrib else  None
+                        if type is not None:
+                            if type == 'place':
+                                tag += 'LOCATION'
+                            elif type == 'person':
+                                tag += 'PERSON'
+                            elif type == 'date':
+                                tag += 'DATE'
+                            else:
+                                tag += 'OTHER'
+
+                        tags.append(tag)
+        except StopIteration:
+            pass
+
+        if len(tags) == 0:
+            tags.append('O')
+
+        tags.reverse()
+
+        tokens.append(Token(id+1, elt.text, lemma, pos, tags))
     return tokens
 
 
-def get_entity(elt: Element) -> Tuple[str, List[Token], str, Element]:
+def get_entity(elt: Element) -> Entity:
     text = get_w_content(elt)
     tag = elt.get('type') if 'type' in elt.attrib else  ""
     tokens = get_tokens_from_tei(elt)
     parent = elt.getparent()
+
+    if elt.tag == 'name':
+
+        start = elt.get('startT') if 'startT' in elt.attrib else  ""
+        end = elt.get('endT') if 'endT' in elt.attrib else  ""
+    elif elt.tag == 'rs':
+        subtype = elt.get('subtype') if 'subtype' in elt.attrib else  ""
+        if subtype == 'ene':
+            start = elt.get('startT') if 'startT' in elt.attrib else  ""
+            end = elt.get('endT') if 'endT' in elt.attrib else  ""
+        
     #TODO get and return lat/lng if it is a place
-    return text, tokens, tag, parent
+    return Entity(text = text, tokens = tokens, start = start, end = end, tag = tag, parent = parent)
 
 
 def get_toponyms_from_tei(elt: Element) -> List[Toponym]:
@@ -130,20 +212,22 @@ def get_toponyms_from_geojson(json_content: Any) -> List[Toponym]:
 def get_entities_from_tei(elt: Element) -> List[Entity]:
     entities = []
     for elt in elt.findall('.//name'):
-        text, tokens, tag, parent = get_entity(elt)
-        toponyms = get_toponyms_from_tei(elt)
-        entities.append(Entity(text, tokens, tag, parent, toponyms=toponyms))
+        entity = get_entity(elt)
+        entity.toponyms = get_toponyms_from_tei(elt)
+        entities.append(entity)
     return entities
 
 
 def get_nested_entities_from_tei(elt: Element) -> List[Entity]:
     nestedEntities = []
     for elt in elt.findall(".//rs[@type='ene']/rs[@subtype='ene']"):
-        text, tokens, tag, parent = get_entity(elt)
-        child = elt.xpath(".//*[self::rs or self::name]")[0]
-        ne = get_entities_from_tei(elt)
+        entity = get_entity(elt)
+        entity.toponyms = get_toponyms_from_tei(elt)
+        entity.child = elt.xpath(".//*[self::rs or self::name]")[0]
+        entity.ne = get_entities_from_tei(elt)
         #TODO get the nesting level
-        toponyms = get_toponyms_from_tei(elt)
-        nestedEntities.append(Entity(text, tokens, tag, parent, child, ne, 1, toponyms=toponyms))
+        entity.level = 1
+        
+        nestedEntities.append(entity)
     return nestedEntities
 

@@ -19,7 +19,7 @@ class Perdido:
         self.geojson = None  # geojson.FeatureCollection?
         
         self.ne = []
-        self.nne = [] # nested named entities
+        self.nne = [] # nested named entities or extended named entities? 
         self.tokens = []
 
         self.toponyms = []

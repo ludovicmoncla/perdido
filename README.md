@@ -43,7 +43,7 @@ doc = geoparser('Je visite la ville de Lyon, Annecy et Chamonix.')
 
 ```python
 for token in doc:
-    print(f'token: {token.text}\tlemma: {token.lemma}\tpos: {token.pos}')
+    print(f'{token.text}\tlemma: {token.lemma}\tpos: {token.pos}')
 ```
 
 #### Print the XML-TEI output

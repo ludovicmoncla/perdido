@@ -1,9 +1,15 @@
 from typing import Any, List, Tuple, Union
 from lxml import etree
+import pkg_resources
+import pandas as pd
+import os
+
+
 
 
 def load_edda_artfl():
-    pass
+    filepath = pkg_resources.resource_stream(__name__, 'datasets/edda_artfl/edda_artf_dataset.csv')
+    return pd.read_csv(filepath, sep='\t')
 
 
 def load_edda_perdido():
@@ -14,8 +20,20 @@ def load_choucas_hikes():
     pass
 
 
+def export_edda_artfl_as_csv():
 
-    
+    path = '../datasets/edda_artfl/'
+    data = []
+    for doc in os.listdir(path):
+        if doc[-4:] == '.tei':
+            data.append(get_data_from_artfl_tei(path, doc))
+    df = pd.DataFrame(data, columns=['filename', 'volume', 'number', 'head', 'normClass', 'author', 'text'])
+    df = df.dropna()
+    df = df.sort_values(['volume', 'number']).reset_index(drop = True)
+
+    df.to_csv(path + 'edda_artf_dataset.csv', sep='\t', index=False)
+
+
 def get_data_from_artfl_tei(file_path, filename):
     file_id = filename[:-4]
     d = []

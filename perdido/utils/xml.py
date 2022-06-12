@@ -162,16 +162,17 @@ def get_entity(elt: Element) -> Entity:
     tag = elt.get('type') if 'type' in elt.attrib else  ""
     tokens = get_tokens_from_tei(elt)
     parent = elt.getparent()
+    start = None
+    end = None
 
     if elt.tag == 'name':
-
-        start = elt.get('startT') if 'startT' in elt.attrib else  ""
-        end = elt.get('endT') if 'endT' in elt.attrib else  ""
+        start = elt.get('startT') if 'startT' in elt.attrib else  None
+        end = elt.get('endT') if 'endT' in elt.attrib else  None
     elif elt.tag == 'rs':
-        subtype = elt.get('subtype') if 'subtype' in elt.attrib else  ""
+        subtype = elt.get('subtype') if 'subtype' in elt.attrib else  None
         if subtype == 'ene':
-            start = elt.get('startT') if 'startT' in elt.attrib else  ""
-            end = elt.get('endT') if 'endT' in elt.attrib else  ""
+            start = elt.get('startT') if 'startT' in elt.attrib else  None
+            end = elt.get('endT') if 'endT' in elt.attrib else  None
         
     #TODO get and return lat/lng if it is a place
     return Entity(text = text, tokens = tokens, start = start, end = end, tag = tag, parent = parent)

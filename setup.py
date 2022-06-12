@@ -59,4 +59,6 @@ setuptools.setup(
     ],
     keywords='geoparsing named-entity-recognition geographic-information-retrieval toponym-resolution toponym-disambiguation',
     install_requires=get_requirements(),
+    include_package_data=True,
+    package_data={'': ['datasets/*/*.csv']},
 )

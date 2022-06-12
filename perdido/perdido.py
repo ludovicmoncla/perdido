@@ -5,8 +5,12 @@ import folium
 import geojson
 
 from perdido.utils.xml import Token
-from perdido.utils.xml import get_tokens_from_tei, get_entities_from_tei, get_toponyms_from_tei, get_nested_entities_from_tei, get_toponyms_from_geojson
+from perdido.utils.xml import get_tokens_from_tei, get_entities_from_tei, get_toponyms_from_tei, get_nested_entities_from_tei, get_toponyms_from_geojson, parent_exists
 from perdido.utils.map import overlay_gpx, get_bounding_box
+
+from spacy.tokens import Span
+from spacy.tokens import Doc
+from spacy.vocab import Vocab
 
 
 class Perdido:
@@ -65,6 +69,24 @@ class Perdido:
                     folium.GeoJson(self.geojson, name='Toponyms').add_to(m)
                 return m    
         return None
+
+
+
+    def to_displacy(self) -> Doc:
+        vocab = Vocab()
+        
+        words = [t.text for t in self.tokens]
+        spaces = [True] * len(words)
+        
+        doc = Doc(vocab, words = words, spaces = spaces)
+        ents = [] 
+
+        for e in self.ne:
+            print(e.text, e.tag, e.start, e.end)
+            ents.append(Span(doc, int(e.start), int(e.end), label=e.tag))
+
+        doc.ents = ents
+        return doc 
 
 
 

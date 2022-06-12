@@ -54,7 +54,7 @@ class Perdido:
             self.toponyms = get_toponyms_from_geojson(self.geojson)  
            
 
-    def get_folium_map(self, properties: Union[List[str], None] = None, gpx: Union[str , None] = None) -> Union[folium.Map,None]:
+    def get_folium_map(self, properties: Union[List[str], None] = ['name', 'source'], gpx: Union[str , None] = None) -> Union[folium.Map,None]:
         m = folium.Map()
         if gpx is not None:
             overlay_gpx(m, gpx)
@@ -71,7 +71,6 @@ class Perdido:
         return None
 
 
-
     def to_displacy(self) -> Doc:
         vocab = Vocab()
         
@@ -82,8 +81,9 @@ class Perdido:
         ents = [] 
 
         for e in self.ne:
-            print(e.text, e.tag, e.start, e.end)
-            ents.append(Span(doc, int(e.start), int(e.end), label=e.tag))
+            if e.start is not None and e.end is not None:
+                print(e.text, e.tag, e.start, e.end)
+                ents.append(Span(doc, int(e.start), int(e.end), label=e.tag))
 
         doc.ents = ents
         return doc 

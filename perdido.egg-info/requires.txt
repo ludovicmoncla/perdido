@@ -3,3 +3,4 @@ folium
 lxml
 geojson
 gpxpy
+spacy

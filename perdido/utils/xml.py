@@ -12,7 +12,7 @@ class Toponym:
         self.source_name = source_name
         self.type = type
     
-    
+
     def __str__(self) -> str: 
         return self.name + " " + str(self.lat) + " " + str(self.lng) + " " + self.source + " " + self.source_name
 
@@ -67,8 +67,7 @@ class Token:
 
 
 class Entity:
-    def __init__(self, text: str, tokens: List[Token], tag: str, start: str, end: str, parent: Any = None, child: Any = None, ne: Any = None, level: int = 0, toponyms: List[Toponym] = []) -> None:
-
+    def __init__(self, text: str, tokens: List[Token], tag: str, start: str, end: str, id: str=None, parent: Any = None, child: Any = None, ne: Any = None, level: int = 0, toponym_candidates: List[Toponym] = []) -> None:
         self.text = text
         self.tokens = tokens
         self.tag = tag
@@ -83,7 +82,9 @@ class Entity:
         self.level = level # find a better name?
         self.ne = ne
 
-        self.toponyms = toponyms
+        self.lat = toponym_candidates[0].lat if len(toponym_candidates) > 0 else None
+        self.lng = toponym_candidates[0].lng if len(toponym_candidates) > 0 else None
+        self.toponyms_candidate = toponym_candidates
 
       # position, start, end ?
         #self.sent = sent # sentence in which the entity occurs, useful?
@@ -176,7 +177,7 @@ def get_entity(elt: Element) -> Entity:
     parent = elt.getparent()
     start = None
     end = None
-
+    id = elt.get('id') if 'type' in elt.attrib else  ""
     if elt.tag == 'name':
         start = elt.get('startT') if 'startT' in elt.attrib else  None
         end = elt.get('endT') if 'endT' in elt.attrib else  None
@@ -187,7 +188,7 @@ def get_entity(elt: Element) -> Entity:
             end = elt.get('endT') if 'endT' in elt.attrib else  None
         
     #TODO get and return lat/lng if it is a place
-    return Entity(text = text, tokens = tokens, start = start, end = end, tag = tag, parent = parent)
+    return Entity(text = text, id = id, tokens = tokens, start = start, end = end, tag = tag, parent = parent)
 
 
 def get_toponyms_from_tei(elt: Element) -> List[Toponym]:

@@ -33,7 +33,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setuptools.setup(
     name='perdido',
-    version='0.1.9',
+    version='0.1.10',
     license='BSD-Clause-2',
     author='Ludovic Moncla',
     author_email='moncla.ludovic@gmail.com',
@@ -60,5 +60,5 @@ setuptools.setup(
     keywords='geoparsing named-entity-recognition geographic-information-retrieval toponym-resolution toponym-disambiguation',
     install_requires=get_requirements(),
     include_package_data=True,
-    package_data={'': ['datasets/*/*.csv']},
+    #package_data={'': ['datasets/*/*.csv']},
 )

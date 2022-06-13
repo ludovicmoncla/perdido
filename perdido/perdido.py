@@ -5,7 +5,7 @@ import lxml.etree as etree
 import folium
 import geojson
 
-from perdido.utils.xml import Token
+from perdido.utils.xml import Token, Entity
 from perdido.utils.xml import get_tokens_from_tei, get_entities_from_tei, get_toponyms_from_tei, get_nested_entities_from_tei, get_toponyms_from_geojson, parent_exists
 from perdido.utils.map import overlay_gpx, get_bounding_box
 
@@ -74,21 +74,39 @@ class Perdido:
         return None
 
 
-    def to_displacy(self) -> Doc:
+
+    def to_spacy_spans(self, entities: List[Entity], doc: Doc) -> List[Span]:
+        spans = []
+        for e in entities:
+            if e.start is not None and e.end is not None:
+                #print(e.text, e.tag, e.start, e.end)
+                if e.tag == 'place':
+                    tag = 'LOC'
+                elif e.tag == 'person':
+                    tag = 'PERSON'
+                #elif e.tag == 'person':
+                #    tag = 'NORP'
+                elif e.tag == 'date':
+                    tag = 'DATE'
+                elif e.tag == 'event':
+                    tag = 'EVENT'
+                else:
+                    tag = 'MISC'
+
+                spans.append(Span(doc, int(e.start), int(e.end), label=tag))
+        return spans
+
+
+    def to_spacy_doc(self) -> Doc:
         vocab = Vocab()
-        
         words = [t.text for t in self.tokens]
         spaces = [True] * len(words)
-        
+
         doc = Doc(vocab, words = words, spaces = spaces)
-        ents = [] 
+  
+        doc.ents = self.to_spacy_spans(self.ne, doc)
+        doc.spans["sc"] = self.to_spacy_spans(self.ne + self.nne, doc)
 
-        for e in self.ne:
-            if e.start is not None and e.end is not None:
-                print(e.text, e.tag, e.start, e.end)
-                ents.append(Span(doc, int(e.start), int(e.end), label=e.tag))
-
-        doc.ents = ents
         return doc 
 
 
@@ -103,7 +121,7 @@ class Perdido:
             if len(e.toponyms) > 0:
                 lat = e.toponyms[0].lat
                 lng = e.toponyms[0].lng 
-                toponym_candidates = [t.to_dict for t in e.toponyms]
+                toponym_candidates = [t.to_dict() for t in e.toponyms]
             else:
                 lat = None
                 lng = None

@@ -1,4 +1,4 @@
-from typing import Any, List, Tuple, Union
+from typing import Any, List, Dict, Union
 from lxml.etree import Element
 
 
@@ -12,8 +12,20 @@ class Toponym:
         self.source_name = source_name
         self.type = type
     
+    
     def __str__(self) -> str: 
         return self.name + " " + str(self.lat) + " " + str(self.lng) + " " + self.source + " " + self.source_name
+
+
+    def to_dict(self) -> Dict:
+        return {
+            'name': self.name, 
+            'lat': self.lat, 
+            'lng': self.lng,
+            'source': self.source,
+            'source_name': self.source_name,
+            'type': self.type
+        }
 
 
 class Token:

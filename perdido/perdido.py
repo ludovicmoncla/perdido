@@ -1,3 +1,4 @@
+from cgitb import text
 from typing import Iterator, List, Union
 
 import lxml.etree as etree
@@ -11,6 +12,8 @@ from perdido.utils.map import overlay_gpx, get_bounding_box
 from spacy.tokens import Span
 from spacy.tokens import Doc
 from spacy.vocab import Vocab
+
+import pandas as pd
 
 
 class Perdido:
@@ -89,4 +92,24 @@ class Perdido:
         return doc 
 
 
+    def to_dataframe(self) -> pd.DataFrame:
+
+        data = []
+        for e in self.ne:
+
+            name = e.text
+            tag = e.tag
+            
+            if len(e.toponyms) > 0:
+                lat = e.toponyms[0].lat
+                lng = e.toponyms[0].lng 
+                toponym_candidates = [t.to_dict for t in e.toponyms]
+            else:
+                lat = None
+                lng = None
+                toponym_candidates = None
+
+            data.append([name, tag, lat, lng, toponym_candidates])
+
+        return pd.DataFrame(data, columns=['name', 'tag', 'lat', 'lng', 'toponym_candidates'])
 

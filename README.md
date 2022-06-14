@@ -79,6 +79,17 @@ for nestedEntity in doc.nne:
 ```
 
 
+#### Shows named entities and nested named entities using the displacy library from spaCy
+
+```python
+displacy.render(doc.to_spacy_doc(), style="ent")
+```
+
+```python
+displacy.render(doc.to_spacy_doc(), style="span")
+```
+
+
 
 
 ### Geocoding

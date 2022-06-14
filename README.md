@@ -82,11 +82,11 @@ for nestedEntity in doc.nne:
 #### Shows named entities and nested named entities using the displacy library from spaCy
 
 ```python
-displacy.render(doc.to_spacy_doc(), style="ent")
+displacy.render(doc.to_spacy_doc(), style="ent", jupyter=True)
 ```
 
 ```python
-displacy.render(doc.to_spacy_doc(), style="span")
+displacy.render(doc.to_spacy_doc(), style="span", jupyter=True)
 ```
 
 

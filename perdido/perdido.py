@@ -94,7 +94,7 @@ class Perdido:
                 else:
                     tag = 'MISC'
 
-                spans.append(Span(doc, int(e.start), int(e.end), label=tag))
+                spans.append(Span(doc, int(e.start), int(e.end), tag))
         return spans
 
 
@@ -105,12 +105,12 @@ class Perdido:
         spaces = [True] * len(words)
         doc = Doc(vocab, words = words, spaces = spaces)
         '''
-        
+
         spacy_parser = spacy.blank("fr")
         doc = spacy_parser(self.text)
   
         doc.ents = self.to_spacy_spans(self.ne, doc)
-        doc.spans["sc"] = self.to_spacy_spans(self.ne + self.nne, doc)
+        doc.spans["sc"] = self.to_spacy_spans(self.nne + self.ne, doc)
 
         return doc
 

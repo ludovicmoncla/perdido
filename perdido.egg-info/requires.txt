@@ -3,4 +3,4 @@ folium
 lxml
 geojson
 gpxpy
-spacy
+spacy>=3.3.0

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: perdido
-Version: 0.1.11
+Version: 0.1.12
 Summary: PERDIDO Geoparser python library
 Home-page: https://github.com/ludovicmoncla/perdido
 Author: Ludovic Moncla
@@ -99,11 +99,11 @@ for nestedEntity in doc.nne:
 #### Shows named entities and nested named entities using the displacy library from spaCy
 
 ```python
-displacy.render(doc.to_spacy_doc(), style="ent")
+displacy.render(doc.to_spacy_doc(), style="ent", jupyter=True)
 ```
 
 ```python
-displacy.render(doc.to_spacy_doc(), style="span")
+displacy.render(doc.to_spacy_doc(), style="span", jupyter=True)
 ```
 
 

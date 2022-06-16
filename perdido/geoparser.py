@@ -1,4 +1,5 @@
 from typing import Iterator, List, Dict, Union
+from requests.exceptions import ConnectionError
 
 import lxml.etree as etree
 import folium
@@ -39,12 +40,11 @@ class Geoparser:
             self.bbox = None
 
 
-    #TODO: add pandas.Series as argument?
-    def __call__(self, content: Union[str, List[str], Series[str]]) -> Union[Perdido, List[Perdido], Series[Perdido], None]:
+    def __call__(self, content: Union[str, List[str], Series]) -> Union[Perdido, List[Perdido], Series, None]:
         return self.parse(content)
 
 
-    def parse(self, content: Union[str, List[str], Series[str]]) -> Union[Perdido, List[Perdido], Series[Perdido], None]:
+    def parse(self, content: Union[str, List[str], Series]) -> Union[Perdido, List[Perdido], Series, None]:
         
         if type(content) == str:
             return self.call_perdido_ws(content)
@@ -61,38 +61,43 @@ class Geoparser:
 
         
     def call_perdido_ws(self, content: str) -> Perdido:
+        try:
+            ws = WebService()
 
-        ws = WebService()
+            parameters = {'api_key': self.api_key, 
+                    #'content': content, 
+                    'lang': self.lang, 
+                    'version': self.version, 
+                    'max_rows': self.max_rows, 
+                    'alt_names': self.alt_names,
+                    'sources': self.sources}
+            
+            if self.bbox is not None:
+                parameters['bbox'] = self.bbox
+    
+            if self.country_code is not None:
+                parameters['country_code'] = self.country_code
 
-        parameters = {'api_key': self.api_key, 
-                'content': content, 
-                'lang': self.lang, 
-                'version': self.version, 
-                'max_rows': self.max_rows, 
-                'alt_names': self.alt_names,
-                'sources': self.sources}
-        
-        if self.bbox is not None:
-            parameters['bbox'] = self.bbox
-   
-        if self.country_code is not None:
-            parameters['country_code'] = self.country_code
+            data = {'content': content}
 
-        ws.post(self.serviceGeoparsing, params=parameters)
+            ws.post(self.serviceGeoparsing, params=parameters, data=data)
 
-        res = Perdido()
-        res.text = content
+            res = Perdido()
+            res.text = content
 
-        success, val = ws.get_result('xml-tei', 'xml')
-        if success:
-            res.tei = val
-
-            success, val =  ws.get_result('geojson')
+            success, val = ws.get_result('xml-tei', 'xml')
             if success:
-                res.geojson = val
-        else:
-            print(val)
+                res.tei = val
 
-        res.parse_tei()
+                success, val =  ws.get_result('geojson')
+                if success:
+                    res.geojson = val
+            else:
+                print(val)
 
-        return res
+            res.parse_tei()
+
+            return res
+        except ConnectionError as e:
+            print(e)
+            return None

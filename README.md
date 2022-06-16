@@ -61,7 +61,7 @@ print(doc.geojson)
 #### Get the list of named entities
 
 ```python
-for entity in doc.ne:
+for entity in doc.named_entities:
     print(f'entity: {entity.text}\ttag: {entity.tag}')
     if entity.tag == 'place':
         for t in entity.toponyms:
@@ -71,7 +71,7 @@ for entity in doc.ne:
 #### Get the list of nested named entities
 
 ```python
-for nestedEntity in doc.nne:
+for nestedEntity in doc.nested_named_entities:
     print(f'entity: {nestedEntity.text}\ttag: {nestedEntity.tag}')
     if nestedEntity.tag == 'place':
         for t in nestedEntity.toponyms:

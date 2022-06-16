@@ -40,11 +40,11 @@ class Geoparser:
 
 
     #TODO: add pandas.Series as argument?
-    def __call__(self, content: Union[str, Series[Perdido], List[str]]) -> Union[Perdido, List[Perdido], Series[Perdido], None]:
+    def __call__(self, content: Union[str, List[str], Series[str]]) -> Union[Perdido, List[Perdido], Series[Perdido], None]:
         return self.parse(content)
 
 
-    def parse(self, content: Union[str, Series[Perdido], List[str]]) -> Union[Perdido, List[Perdido], Series[Perdido], None]:
+    def parse(self, content: Union[str, List[str], Series[str]]) -> Union[Perdido, List[Perdido], Series[Perdido], None]:
         
         if type(content) == str:
             return self.call_perdido_ws(content)

@@ -24,12 +24,16 @@ class Perdido:
 
         self.text = None
         self.tei = None
-        self.geojson = None  # geojson.FeatureCollection?
+        self.geojson = None 
         
-        self.ne = []
-        self.nne = [] # nested named entities or extended named entities? 
         self.tokens = []
 
+        self.entities = [] # TODO
+        
+        self.named_entities = []
+        self.nested_named_entities = [] 
+        self.nominal_entities = []
+        
         self.toponyms = []
 
 
@@ -47,9 +51,9 @@ class Perdido:
             root = etree.fromstring(self.tei)
             
             self.tokens = get_tokens_from_tei(root)
-            self.ne = get_entities_from_tei(root)
+            self.named_entities = get_entities_from_tei(root)
             self.toponyms = get_toponyms_from_tei(root) 
-            self.nne = get_nested_entities_from_tei(root)
+            self.nested_named_entities = get_nested_entities_from_tei(root)
 
 
     def parse_geojson(self) -> None:
@@ -118,7 +122,7 @@ class Perdido:
     def to_dataframe(self) -> pd.DataFrame:
 
         data = []
-        for e in self.ne:
+        for e in self.named_entities:
 
             name = e.text
             tag = e.tag

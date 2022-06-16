@@ -3,6 +3,7 @@ import json
 from lxml import etree
 from io import StringIO
 import requests
+from sys import getsizeof
 
 
 class WebService():
@@ -10,12 +11,15 @@ class WebService():
     def __init__(self, url_api: str = 'http://choucas.univ-pau.fr/PERDIDO/api/') -> None:
         self._url_api = url_api
         self._parameters = None
+        self._data = None
         self.result = None
 
 
-    def post(self, service: str, params: Dict[str, Any]) -> None:
+    def post(self, service: str, params: Dict[str, Any], data : Dict[str, Any]) -> None:
         self._parameters = params
-        self.result = requests.post(self._url_api + service, params=self._parameters)
+        self._data = data
+         # param for get style request
+        self.result = requests.post(self._url_api + service, params=self._parameters, json=self._data)
 
 
     def get_result(self, field: str = 'result', output_format: str = 'json') -> Union[Tuple[bool, str], None]:

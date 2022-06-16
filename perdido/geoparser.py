@@ -7,6 +7,9 @@ import geojson
 from perdido.utils.webservices import WebService
 from perdido.perdido import Perdido
 
+from pandas.core.series import Series
+
+
 class Geoparser:
 
 
@@ -37,19 +40,22 @@ class Geoparser:
 
 
     #TODO: add pandas.Series as argument?
-    def __call__(self, content: Union[str, List[str]]) -> Union[Perdido, List[Perdido], None]: 
+    def __call__(self, content: Union[str, Series[Perdido], List[str]]) -> Union[Perdido, List[Perdido], Series[Perdido], None]:
         return self.parse(content)
 
 
-    def parse(self, content: str) -> Union[Perdido, List[Perdido], None]:
+    def parse(self, content: Union[str, Series[Perdido], List[str]]) -> Union[Perdido, List[Perdido], Series[Perdido], None]:
         
         if type(content) == str:
             return self.call_perdido_ws(content)
-        elif type(content) == list:
+        elif type(content) == list or type(content) == Series:
             l = []
             for c in content:
                 l.append(self.call_perdido_ws(c))
-            return l
+            if type(content) == Series:
+                return Series(l)
+            else:
+                return l
         else:
             return None
 

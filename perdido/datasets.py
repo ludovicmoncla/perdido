@@ -1,4 +1,4 @@
-from typing import Any, List, Tuple, Union
+from typing import Any, List, Tuple, Union, Dict
 from lxml import etree
 import pkg_resources
 import pandas as pd
@@ -7,9 +7,14 @@ import os
 
 
 
-def load_edda_artfl():
+def load_edda_artfl() -> Dict:
     filepath = pkg_resources.resource_stream(__name__, 'datasets/edda_artfl/edda_artf_dataset.csv')
-    return pd.read_csv(filepath, sep='\t')
+    d = {}
+    d['data'] = pd.read_csv(filepath, sep='\t')
+    d['description'] = 'The description of the dataset will be available soon!'
+    d['feature_names'] = ['filename', 'volume', 'number', 'head', 'normClass', 'author', 'text']
+
+    return d
 
 
 def load_edda_perdido():
@@ -34,7 +39,7 @@ def export_edda_artfl_as_csv():
     df.to_csv(path + 'edda_artf_dataset.csv', sep='\t', index=False)
 
 
-def get_data_from_artfl_tei(file_path, filename):
+def get_data_from_artfl_tei(file_path: str, filename: str):
     file_id = filename[:-4]
     d = []
     try:

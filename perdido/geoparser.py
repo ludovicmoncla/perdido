@@ -36,11 +36,25 @@ class Geoparser:
             self.bbox = None
 
 
-    def __call__(self, content: str) -> Perdido: 
+    #TODO: add pandas.Series as argument?
+    def __call__(self, content: Union[str, List[str]]) -> Union[Perdido, List[Perdido], None]: 
         return self.parse(content)
 
 
-    def parse(self, content: str) -> Perdido:
+    def parse(self, content: str) -> Union[Perdido, List[Perdido], None]:
+        
+        if type(content) == str:
+            return self.call_perdido_ws(content)
+        elif type(content) == list:
+            l = []
+            for c in content:
+                l.append(self.call_perdido_ws(c))
+            return l
+        else:
+            return None
+
+        
+    def call_perdido_ws(self, content: str) -> Perdido:
 
         ws = WebService()
 
@@ -72,9 +86,7 @@ class Geoparser:
                 res.geojson = val
         else:
             print(val)
-            
 
         res.parse_tei()
 
         return res
-

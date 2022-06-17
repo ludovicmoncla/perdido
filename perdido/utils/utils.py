@@ -67,7 +67,7 @@ class Token:
 
 
 class Entity:
-    def __init__(self, text: str, tokens: List[Token], tag: str, start: str, end: str, id: str=None, parent: Any = None, child: Any = None, ne: Any = None, level: int = 0, toponym_candidates: List[Toponym] = []) -> None:
+    def __init__(self, text: str, tokens: List[Token], tag: str, start: str, end: str, id: str=None, parent: Any = None, child: Any = None, named_entities: Any = None, level: int = 0, toponym_candidates: List[Toponym] = []) -> None:
         self.text = text
         self.tokens = tokens
         self.tag = tag
@@ -80,7 +80,7 @@ class Entity:
         self.child = child
 
         self.level = level # find a better name?
-        self.ne = ne
+        self.named_entities = named_entities
 
         self.lat = toponym_candidates[0].lat if len(toponym_candidates) > 0 else None
         self.lng = toponym_candidates[0].lng if len(toponym_candidates) > 0 else None
@@ -225,7 +225,7 @@ def get_entities_from_tei(elt: Element) -> List[Entity]:
     entities = []
     for elt in elt.findall('.//name'):
         entity = get_entity(elt)
-        entity.toponyms = get_toponyms_from_tei(elt)
+        entity.toponyms_candidate = get_toponyms_from_tei(elt)
         entities.append(entity)
     return entities
 
@@ -234,9 +234,9 @@ def get_nested_entities_from_tei(elt: Element) -> List[Entity]:
     nestedEntities = []
     for elt in elt.findall(".//rs[@type='ene']/rs[@subtype='ene']"):
         entity = get_entity(elt)
-        entity.toponyms = get_toponyms_from_tei(elt)
+        entity.toponyms_candidate = get_toponyms_from_tei(elt)
         entity.child = elt.xpath(".//*[self::rs or self::name]")[0]
-        entity.ne = get_entities_from_tei(elt)
+        entity.named_entities = get_entities_from_tei(elt)
         #TODO get the nesting level
         entity.level = 1
         

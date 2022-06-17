@@ -223,24 +223,24 @@ def get_toponyms_from_geojson(json_content: Any) -> List[Toponym]:
 
 def get_entities_from_tei(elt: Element) -> List[Entity]:
     entities = []
-    for elt in elt.findall('.//name'):
+    for e in elt.findall('.//name'):
         entity = get_entity(elt)
-        entity.toponyms_candidate = get_toponyms_from_tei(elt)
+        entity.toponyms_candidate = get_toponyms_from_tei(e)
         entities.append(entity)
 
-    for elt in elt.findall(".//rs[@subtype='latlong']"):
-        entities.append(get_entity(elt, 'subtype'))
+    for e in elt.findall(".//rs[@subtype='latlong']"):
+        entities.append(get_entity(e, 'subtype'))
 
     return entities
 
 
 def get_nested_entities_from_tei(elt: Element) -> List[Entity]:
     nestedEntities = []
-    for elt in elt.findall(".//rs[@type='ene']/rs[@subtype='ene']"):
-        entity = get_entity(elt)
-        entity.toponyms_candidate = get_toponyms_from_tei(elt)
-        entity.child = elt.xpath(".//*[self::rs or self::name]")[0]
-        entity.named_entities = get_entities_from_tei(elt)
+    for e in elt.findall(".//rs[@type='ene']/rs[@subtype='ene']"):
+        entity = get_entity(e)
+        entity.toponyms_candidate = get_toponyms_from_tei(e)
+        entity.child = e.xpath(".//*[self::rs or self::name]")[0]
+        entity.named_entities = get_entities_from_tei(e)
         #TODO get the nesting level
         entity.level = 1
         

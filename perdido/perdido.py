@@ -46,6 +46,11 @@ class Perdido:
         return len(self.tokens)
 
 
+    def to_xml(self, path: str) -> None:
+        tree = etree.ElementTree(self.tei)
+        tree.write(path)
+
+
     def parse_tei(self) -> None:
         if self.tei is not None:
             root = etree.fromstring(self.tei)

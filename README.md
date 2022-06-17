@@ -148,10 +148,10 @@ import requests
 
 url = 'http://choucas.univ-pau.fr/PERDIDO/api/'
 service = 'geoparsing'
-content = 'Je visite la ville de Lyon, Annecy et le Mont-Blanc.'
-parameters = {'api_key': 'demo', 'content': content}
+data = {'content': 'Je visite la ville de Lyon, Annecy et le Mont-Blanc.'}
+parameters = {'api_key': 'demo'}
 
-r = requests.post(url+service, params=parameters)
+r = requests.post(url+service, params=parameters, json=data)
 
 print(r.text)
 ```

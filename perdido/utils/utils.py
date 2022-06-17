@@ -122,7 +122,7 @@ def get_tokens_from_tei(elt: Element) -> List[Token]:
     tokens = []
     for elt in elt.findall('.//w'):
         lemma = elt.get('lemma') if 'lemma' in elt.attrib else ""
-        pos = elt.get('type') if 'type' in elt.attrib else ""
+        pos = elt.get('pos') if 'pos' in elt.attrib else ""
 
         id = int(elt.get('id')[1:]) if 'id' in elt.attrib else None
 

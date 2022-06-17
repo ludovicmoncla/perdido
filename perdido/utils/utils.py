@@ -170,20 +170,20 @@ def get_tokens_from_tei(elt: Element) -> List[Token]:
     return tokens
 
 
-def get_entity(elt: Element) -> Entity:
+def get_entity(elt: Element, att_tag:str = 'type') -> Entity:
     text = get_w_content(elt)
-    tag = elt.get('type') if 'type' in elt.attrib else  ""
+    tag = elt.get(att_tag) if att_tag in elt.attrib else  ""
     tokens = get_tokens_from_tei(elt)
     parent = elt.getparent()
     start = None
     end = None
-    id = elt.get('id') if 'type' in elt.attrib else  ""
+    id = elt.get('id') if 'id' in elt.attrib else  ""
     if elt.tag == 'name':
         start = elt.get('startT') if 'startT' in elt.attrib else  None
         end = elt.get('endT') if 'endT' in elt.attrib else  None
     elif elt.tag == 'rs':
         subtype = elt.get('subtype') if 'subtype' in elt.attrib else  None
-        if subtype == 'ene':
+        if subtype == 'ene' or subtype == 'latlong':
             start = elt.get('startT') if 'startT' in elt.attrib else  None
             end = elt.get('endT') if 'endT' in elt.attrib else  None
         
@@ -227,6 +227,10 @@ def get_entities_from_tei(elt: Element) -> List[Entity]:
         entity = get_entity(elt)
         entity.toponyms_candidate = get_toponyms_from_tei(elt)
         entities.append(entity)
+
+    for elt in elt.findall(".//rs[@subtype='latlong']"):
+        entities.append(get_entity(elt, 'subtype'))
+
     return entities
 
 

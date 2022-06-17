@@ -51,6 +51,11 @@ class Perdido:
         tree.write(path)
 
 
+    def to_geojson(self, path: str) -> None:
+        with open(path, 'w') as f:
+            geojson.dump(self.geojson, f)
+
+
     def parse_tei(self) -> None:
         if self.tei is not None:
             root = etree.fromstring(self.tei)

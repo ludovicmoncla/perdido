@@ -89,8 +89,19 @@ displacy.render(doc.to_spacy_doc(), style="ent", jupyter=True)
 displacy.render(doc.to_spacy_doc(), style="span", jupyter=True)
 ```
 
+#### Saving results
 
+```python
+doc.to_xml('filename.xml')
+```
 
+```python
+doc.to_geojson('filename.geojson')
+```
+
+```python
+doc.to_csv('filename.csv')
+```
 
 ### Geocoding
 
@@ -129,8 +140,6 @@ print(doc.geojson)
 for t in doc.toponyms: 
     print(f'lat: {t.lat}\tlng: {t.lng}\tsource {t.source}\tsourceName {t.source_name}')
 ```
-
-
 
 
 

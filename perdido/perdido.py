@@ -47,13 +47,18 @@ class Perdido:
 
 
     def to_xml(self, path: str) -> None:
-        tree = etree.ElementTree(self.tei)
+        tree = etree.ElementTree(etree.fromstring(self.tei))
         tree.write(path)
 
 
     def to_geojson(self, path: str) -> None:
         with open(path, 'w') as f:
             geojson.dump(self.geojson, f)
+
+
+    def to_csv(self, path: str, sep: str = ',') -> None:
+        df = self.to_dataframe()
+        df.to_csv(path, sep=sep)
 
 
     def parse_tei(self) -> None:

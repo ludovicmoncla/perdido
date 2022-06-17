@@ -103,15 +103,14 @@ class Perdido:
 
 
     def to_spacy_doc(self) -> Doc:
-        '''
+        
         vocab = Vocab()
         words = [t.text for t in self.tokens]
         spaces = [True] * len(words)
         doc = Doc(vocab, words = words, spaces = spaces)
-        '''
 
-        spacy_parser = spacy.blank("fr")
-        doc = spacy_parser(self.text)
+        #spacy_parser = spacy.blank("fr")
+        #doc = spacy_parser(self.text)
   
         doc.ents = self.to_spacy_spans(self.named_entities, doc)
         doc.spans["sc"] = self.to_spacy_spans(self.nested_named_entities + self.named_entities, doc)

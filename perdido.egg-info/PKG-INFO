@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: perdido
-Version: 0.1.13
+Version: 0.1.14
 Summary: PERDIDO Geoparser python library
 Home-page: https://github.com/ludovicmoncla/perdido
 Author: Ludovic Moncla
@@ -78,7 +78,7 @@ print(doc.geojson)
 #### Get the list of named entities
 
 ```python
-for entity in doc.ne:
+for entity in doc.named_entities:
     print(f'entity: {entity.text}\ttag: {entity.tag}')
     if entity.tag == 'place':
         for t in entity.toponyms:
@@ -88,7 +88,7 @@ for entity in doc.ne:
 #### Get the list of nested named entities
 
 ```python
-for nestedEntity in doc.nne:
+for nestedEntity in doc.nested_named_entities:
     print(f'entity: {nestedEntity.text}\ttag: {nestedEntity.tag}')
     if nestedEntity.tag == 'place':
         for t in nestedEntity.toponyms:
@@ -165,10 +165,10 @@ import requests
 
 url = 'http://choucas.univ-pau.fr/PERDIDO/api/'
 service = 'geoparsing'
-content = 'Je visite la ville de Lyon, Annecy et le Mont-Blanc.'
-parameters = {'api_key': 'demo', 'content': content}
+data = {'content': 'Je visite la ville de Lyon, Annecy et le Mont-Blanc.'}
+parameters = {'api_key': 'demo'}
 
-r = requests.post(url+service, params=parameters)
+r = requests.post(url+service, params=parameters, json=data)
 
 print(r.text)
 ```

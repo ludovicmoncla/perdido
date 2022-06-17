@@ -113,8 +113,8 @@ class Perdido:
         spacy_parser = spacy.blank("fr")
         doc = spacy_parser(self.text)
   
-        doc.ents = self.to_spacy_spans(self.ne, doc)
-        doc.spans["sc"] = self.to_spacy_spans(self.nne + self.ne, doc)
+        doc.ents = self.to_spacy_spans(self.named_entities, doc)
+        doc.spans["sc"] = self.to_spacy_spans(self.nested_named_entities + self.named_entities, doc)
 
         return doc
 

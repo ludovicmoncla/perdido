@@ -4,6 +4,8 @@ import pkg_resources
 import pandas as pd
 import os
 
+from perdido.perdido import PerdidoCollection
+
 
 
 
@@ -17,13 +19,33 @@ def load_edda_artfl() -> Dict:
     return d
 
 
-def load_edda_perdido():
-    pass
+def load_edda_perdido() -> PerdidoCollection:
+    filepath = pkg_resources.resource_stream(__name__, 'datasets/edda_perdido/edda_perdido_dataset.pickle')
+    collection = PerdidoCollection()
+    collection.load(filepath)
 
 
 def load_choucas_hikes():
     pass
 
+
+def dump_edda_perdido():
+    collection = PerdidoCollection()
+    path = '../datasets/edda_artfl/'
+    data = []
+    for doc in os.listdir(path):
+        if doc[-4:] == '.tei':
+            data.append(get_data_from_artfl_tei(path, doc))
+    
+    df = pd.DataFrame(data, columns=['filename', 'volume', 'number', 'head', 'normClass', 'author', 'text'])
+    df = df.dropna()
+    df = df.sort_values(['volume', 'number']).reset_index(drop = True)
+
+    #TODO get the metadata
+
+    path = '../datasets/edda_perdido/'
+    collection.dump(path + 'edda_perdido_dataset.pickle')
+    
 
 def export_edda_artfl_as_csv():
 

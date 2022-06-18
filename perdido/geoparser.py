@@ -49,11 +49,11 @@ class Geoparser:
         if type(content) == str:
             return self.call_perdido_ws(content)
         elif type(content) == list or type(content) == Series:
-            l = []
+            collection = PerdidoCollection()
             for c in content:
-                l.append(self.call_perdido_ws(c))
+                collection.append(self.call_perdido_ws(c))
             else:
-                return PerdidoCollection(l)
+                return collection
         else:
             return None
 

@@ -5,8 +5,8 @@ import lxml.etree as etree
 import folium
 import geojson
 
-from perdido.utils.xml import Token, Entity
-from perdido.utils.xml import get_tokens_from_tei, get_entities_from_tei, get_toponyms_from_tei, get_nested_entities_from_tei, get_toponyms_from_geojson, parent_exists
+from perdido.utils.utils import Token, Entity
+from perdido.utils.utils import get_tokens_from_tei, get_entities_from_tei, get_toponyms_from_tei, get_nested_entities_from_tei, get_toponyms_from_geojson, parent_exists
 from perdido.utils.map import overlay_gpx, get_bounding_box
 
 from spacy.tokens import Span
@@ -29,8 +29,14 @@ class Perdido:
         self.tokens = []
 
         self.entities = [] # TODO
-        
+
         self.named_entities = []
+        self.ne_place = []
+        self.ne_person = []
+        self.ne_date = []
+        self.ne_event = []
+        self.ne_misc = []
+
         self.nested_named_entities = [] 
         self.nominal_entities = []
         
@@ -70,6 +76,14 @@ class Perdido:
             self.toponyms = get_toponyms_from_tei(root) 
             self.nested_named_entities = get_nested_entities_from_tei(root)
 
+            self.ne_place = get_entities_from_tei(root, 'place')
+            self.ne_person = get_entities_from_tei(root, 'person')
+            self.ne_date = get_entities_from_tei(root, 'date')
+            self.ne_event = get_entities_from_tei(root, 'event')
+            self.ne_misc = get_entities_from_tei(root, 'other')
+
+            #self.nominal_entities = []
+            #self.entities = []
 
     def parse_geojson(self) -> None:
         if self.geojson is not None:
@@ -141,10 +155,10 @@ class Perdido:
             name = e.text
             tag = e.tag
             
-            if len(e.toponyms) > 0:
-                lat = e.toponyms[0].lat
-                lng = e.toponyms[0].lng 
-                toponym_candidates = [t.to_dict() for t in e.toponyms]
+            if len(e.toponyms_candidate) > 0:
+                lat = e.toponyms_candidate[0].lat
+                lng = e.toponyms_candidate[0].lng 
+                toponym_candidates = [t.to_dict() for t in e.toponyms_candidate]
             else:
                 lat = None
                 lng = None
@@ -154,3 +168,59 @@ class Perdido:
 
         return pd.DataFrame(data, columns=['name', 'tag', 'lat', 'lng', 'toponym_candidates'])
 
+
+class PerdidoCollection:
+
+    def __init__(self, data: List[Perdido]) -> None:
+        self.data: List[Perdido] = data
+
+
+    def __len__(self) -> int:
+        return len(self.data)
+
+
+    def __getitem__(self, index: int) -> Perdido:
+        return self.data[index]
+
+
+    def __iter__(self) -> Iterator[Token]:
+        for t in self.tokens:
+            yield t
+
+    def __iter__(self):
+        self.index = 0
+        return self
+ 
+
+    def __next__(self) -> Perdido:
+        if self.index < len(self.data):
+            d = self.data[self.index]
+            self.index += 1
+            return d
+        raise StopIteration
+
+    def truc(self) -> None:
+        print('truc')
+
+    
+    def contains(self, tags: Union[str, List[str]]) -> List[Perdido]:
+        collection = []
+
+        for p in self.data:
+            pass
+        if type(tags) == str:
+            if tags == 'place':
+                pass
+            elif tags == 'person':
+                pass
+            elif tags == 'event':
+                pass
+            elif tags == 'misc' or tags == 'other':
+                pass
+            else:
+                pass
+        elif type(tags) == list:
+            pass
+
+
+    #[{'item': '', 'quantity':''}, {}]

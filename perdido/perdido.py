@@ -256,8 +256,8 @@ class PerdidoCollection:
 
     def load(self, filepath: str) -> None:
         # .pickle
-        dump = open(filepath, "wb")
-        collection = pickle.load(self, dump)
+        dump = open(filepath, "rb")
+        collection = pickle.load(dump)
         self.data = collection.data
         self.metadata = collection.metadata
         dump.close()

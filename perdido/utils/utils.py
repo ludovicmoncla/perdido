@@ -221,11 +221,18 @@ def get_toponyms_from_geojson(json_content: Any) -> List[Toponym]:
     return toponyms
 
 
-def get_entities_from_tei(elt: Element) -> List[Entity]:
+def get_entities_from_tei(elt: Element, tag:str = 'all') -> List[Entity]:
     entities = []
-    for e in elt.findall('.//name'):
-        entity = get_entity(elt)
-        entity.toponyms_candidate = get_toponyms_from_tei(e)
+    
+    if tag == 'all':
+        xpath = './/name'
+    elif tag in ['place', 'person', 'date', 'event', 'other']:
+        xpath = ".//name[@type='" + tag + "']"
+
+    for e in elt.findall(xpath):
+        entity = get_entity(e)
+        if entity.tag == 'place':
+            entity.toponyms_candidate = get_toponyms_from_tei(e)
         entities.append(entity)
 
     for e in elt.findall(".//rs[@subtype='latlong']"):

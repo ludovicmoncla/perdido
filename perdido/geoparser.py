@@ -6,7 +6,7 @@ import folium
 import geojson
 
 from perdido.utils.webservices import WebService
-from perdido.perdido import Perdido
+from perdido.perdido import Perdido, PerdidoCollection
 
 from pandas.core.series import Series
 
@@ -40,11 +40,11 @@ class Geoparser:
             self.bbox = None
 
 
-    def __call__(self, content: Union[str, List[str], Series]) -> Union[Perdido, List[Perdido], Series, None]:
+    def __call__(self, content: Union[str, List[str], Series]) -> Union[Perdido, PerdidoCollection, None]:
         return self.parse(content)
 
 
-    def parse(self, content: Union[str, List[str], Series]) -> Union[Perdido, List[Perdido], Series, None]:
+    def parse(self, content: Union[str, List[str], Series]) -> Union[Perdido, PerdidoCollection, None]:
         
         if type(content) == str:
             return self.call_perdido_ws(content)
@@ -52,10 +52,8 @@ class Geoparser:
             l = []
             for c in content:
                 l.append(self.call_perdido_ws(c))
-            if type(content) == Series:
-                return Series(l)
             else:
-                return l
+                return PerdidoCollection(l)
         else:
             return None
 

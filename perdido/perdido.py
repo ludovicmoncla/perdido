@@ -199,9 +199,6 @@ class PerdidoCollection:
             return d
         raise StopIteration
 
-    def truc(self) -> None:
-        print('truc')
-
     
     def contains(self, tags: Union[str, List[str]]) -> List[Perdido]:
         collection = []

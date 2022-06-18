@@ -1,5 +1,5 @@
 from cgitb import text
-from typing import Iterator, List, Union
+from typing import Iterator, List, Union, Dict
 from __future__ import annotations
 
 import lxml.etree as etree
@@ -14,6 +14,7 @@ from spacy.tokens import Span
 from spacy.tokens import Doc
 from spacy.vocab import Vocab
 import spacy
+import pickle
 
 import pandas as pd
 
@@ -172,9 +173,9 @@ class Perdido:
 
 class PerdidoCollection:
 
-    def __init__(self, data: List[Perdido] = []) -> None:
+    def __init__(self, data: List[Perdido] = [], metadata: List[Dict] = []) -> None:
         self.data = data
-        self.metadata = {}
+        self.metadata = metadata
 
 
     def __len__(self) -> int:
@@ -208,6 +209,10 @@ class PerdidoCollection:
             self.data.append(item)
 
 
+    def extend(self, items: List[Perdido]) -> None:
+        self.data.extend(items)
+
+
     #TODO find a better name?
     def contains(self, tags: Union[str, List[str]]) -> PerdidoCollection:
         collection = PerdidoCollection()
@@ -216,13 +221,13 @@ class PerdidoCollection:
             
             if type(tags) == str:
                 if tags == 'place':
-                    collection.append(doc.ne_place)
+                    collection.extend(doc.ne_place)
                 elif tags == 'person':
-                    collection.append(doc.ne_)
+                    collection.extend(doc.ne_person)
                 elif tags == 'event':
-                    collection.append(doc.ne_place)
+                    collection.extend(doc.ne_event)
                 elif tags == 'misc' or tags == 'other':
-                    collection.append(doc.ne_place)
+                    collection.extend(doc.ne_misc)
                 else:
                     pass
             elif type(tags) == list:
@@ -240,3 +245,19 @@ class PerdidoCollection:
     # filter on metadata
     def filter(self) -> PerdidoCollection:
         pass
+
+
+    def dump(self, filepath: str) -> None:
+        # .pickle
+        dump = open(filepath, "wb")
+        pickle.dump(self, dump)
+        dump.close()
+
+
+    def load(self, filepath: str) -> None:
+        # .pickle
+        dump = open(filepath, "wb")
+        collection = pickle.load(self, dump)
+        self.data = collection.data
+        self.metadata = collection.metadata
+        dump.close()

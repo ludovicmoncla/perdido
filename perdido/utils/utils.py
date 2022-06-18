@@ -174,7 +174,8 @@ def get_entity(elt: Element, att_tag:str = 'type') -> Entity:
     text = get_w_content(elt)
     tag = elt.get(att_tag) if att_tag in elt.attrib else  ""
     tokens = get_tokens_from_tei(elt)
-    parent = elt.getparent()
+    #TODO fix this, issue with pickle etree element
+    parent = ''#elt.getparent() 
     start = None
     end = None
     id = elt.get('id') if 'id' in elt.attrib else  ""
@@ -246,7 +247,8 @@ def get_nested_entities_from_tei(elt: Element) -> List[Entity]:
     for e in elt.findall(".//rs[@type='ene']/rs[@subtype='ene']"):
         entity = get_entity(e)
         entity.toponyms_candidate = get_toponyms_from_tei(e)
-        entity.child = e.xpath(".//*[self::rs or self::name]")[0]
+        #TODO fix this, issue with pickle etree element
+        entity.child = '' # e.xpath(".//*[self::rs or self::name]")[0]
         entity.named_entities = get_entities_from_tei(e)
         #TODO get the nesting level
         entity.level = 1

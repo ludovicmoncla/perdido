@@ -1,6 +1,6 @@
+from __future__ import annotations
 from cgitb import text
 from typing import Iterator, List, Union, Dict
-from __future__ import annotations
 
 import lxml.etree as etree
 import folium

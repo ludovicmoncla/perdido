@@ -1,5 +1,6 @@
 from cgitb import text
 from typing import Iterator, List, Union
+from __future__ import annotations
 
 import lxml.etree as etree
 import folium
@@ -171,8 +172,9 @@ class Perdido:
 
 class PerdidoCollection:
 
-    def __init__(self, data: List[Perdido]) -> None:
-        self.data: List[Perdido] = data
+    def __init__(self, data: List[Perdido] = []) -> None:
+        self.data = data
+        self.metadata = {}
 
 
     def __len__(self) -> int:
@@ -187,6 +189,7 @@ class PerdidoCollection:
         for t in self.tokens:
             yield t
 
+
     def __iter__(self):
         self.index = 0
         return self
@@ -199,25 +202,41 @@ class PerdidoCollection:
             return d
         raise StopIteration
 
-    
-    def contains(self, tags: Union[str, List[str]]) -> List[Perdido]:
-        collection = []
 
-        for p in self.data:
-            pass
-        if type(tags) == str:
-            if tags == 'place':
-                pass
-            elif tags == 'person':
-                pass
-            elif tags == 'event':
-                pass
-            elif tags == 'misc' or tags == 'other':
-                pass
-            else:
-                pass
-        elif type(tags) == list:
-            pass
+    def append(self, item: Perdido) -> None:
+        if type(item) == Perdido:
+            self.data.append(item)
 
 
-    #[{'item': '', 'quantity':''}, {}]
+    #TODO find a better name?
+    def contains(self, tags: Union[str, List[str]]) -> PerdidoCollection:
+        collection = PerdidoCollection()
+
+        for doc in self.data:
+            
+            if type(tags) == str:
+                if tags == 'place':
+                    collection.append(doc.ne_place)
+                elif tags == 'person':
+                    collection.append(doc.ne_)
+                elif tags == 'event':
+                    collection.append(doc.ne_place)
+                elif tags == 'misc' or tags == 'other':
+                    collection.append(doc.ne_place)
+                else:
+                    pass
+            elif type(tags) == list:
+                pass
+
+        return collection
+
+
+    #TODO find a better name?
+    def within_area(self, bbox:List[float]) -> PerdidoCollection:
+        #get the documents with places located within a bounding box
+        pass
+
+
+    # filter on metadata
+    def filter(self) -> PerdidoCollection:
+        pass

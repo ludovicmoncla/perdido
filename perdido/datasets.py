@@ -5,7 +5,7 @@ import pandas as pd
 import os
 
 from perdido.perdido import PerdidoCollection
-
+from perdido.geoparser import Geoparser
 
 
 
@@ -41,10 +41,17 @@ def dump_edda_perdido():
     df = df.dropna()
     df = df.sort_values(['volume', 'number']).reset_index(drop = True)
 
+    
+    
+    geoparser = Geoparser(version = 'Encyclopedie')
+    docs = geoparser(df.text)
     #TODO get the metadata
 
+    #[{'filename': 'Pau', 'author' : 'test 1'}, {'filename': 'Paris', 'author' : 'test 2'}]
+    docs.metadata = metadata
+
     path = '../datasets/edda_perdido/'
-    collection.dump(path + 'edda_perdido_dataset.pickle')
+    docs.dump(path + 'edda_perdido_dataset.pickle')
     
 
 def export_edda_artfl_as_csv():

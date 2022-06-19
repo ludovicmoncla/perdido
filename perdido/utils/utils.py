@@ -94,7 +94,7 @@ class Entity:
     def __str__(self) -> str: 
         res = self.text + " " + self.tag + "\n"
         if self.tag == 'place':
-            for toponym in self.toponyms:
+            for toponym in self.toponyms_candidate:
                 res += " toponym candidate > "+ str(toponym) + "\n"
         return res
 

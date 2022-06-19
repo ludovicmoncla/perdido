@@ -19,40 +19,19 @@ def load_edda_artfl() -> Dict:
     return d
 
 
-def load_edda_perdido() -> PerdidoCollection:
+def load_edda_perdido() -> Dict:
     filepath = pkg_resources.resource_stream(__name__, 'datasets/edda_perdido/edda_perdido_dataset.pickle')
+    d = {}
     collection = PerdidoCollection()
     collection.load(filepath)
-
+    d['data'] = collection
+    d['description'] = 'The description of the dataset will be available soon!'
+    
+    return d
 
 def load_choucas_hikes():
     pass
 
-
-def dump_edda_perdido():
-    collection = PerdidoCollection()
-    path = '../datasets/edda_artfl/'
-    data = []
-    for doc in os.listdir(path):
-        if doc[-4:] == '.tei':
-            data.append(get_data_from_artfl_tei(path, doc))
-    
-    df = pd.DataFrame(data, columns=['filename', 'volume', 'number', 'head', 'normClass', 'author', 'text'])
-    df = df.dropna()
-    df = df.sort_values(['volume', 'number']).reset_index(drop = True)
-
-    
-    
-    geoparser = Geoparser(version = 'Encyclopedie')
-    docs = geoparser(df.text)
-    #TODO get the metadata
-
-    #[{'filename': 'Pau', 'author' : 'test 1'}, {'filename': 'Paris', 'author' : 'test 2'}]
-    docs.metadata = metadata
-
-    path = '../datasets/edda_perdido/'
-    docs.dump(path + 'edda_perdido_dataset.pickle')
-    
 
 def export_edda_artfl_as_csv():
 
@@ -97,3 +76,29 @@ def get_data_from_artfl_tei(file_path: str, filename: str):
         pass
         #print(filename + ': ' + str(e))
     return d
+
+
+def dump_edda_perdido():
+    
+    input_path = '../datasets/edda_artfl/'
+    data = []
+    for doc in os.listdir(input_path):
+        if doc[-4:] == '.tei':
+            data.append(get_data_from_artfl_tei(input_path, doc))
+    
+    df = pd.DataFrame(data, columns=['filename', 'volume', 'number', 'head', 'normClass', 'author', 'text'])
+    df = df.dropna()
+    df = df.sort_values(['volume', 'number']).reset_index(drop = True)
+
+    
+    
+    geoparser = Geoparser(version = 'Encyclopedie')
+    docs = geoparser(df.text)
+
+    df = df.drop(['text'], axis=1)
+    
+    docs.metadata = df.to_dict('records')
+
+    ouput_path = '../datasets/edda_perdido/'
+    docs.dump(ouput_path + 'edda_perdido_dataset.pickle')
+    

@@ -208,6 +208,10 @@ class PerdidoCollection:
         self.data.extend(items)
 
 
+    def to_dataframe(self) -> pd.DataFrame :
+        return pd.DataFrame(self.metadata)
+
+
     #TODO find a better name?
     def contains(self, tags: Union[str, List[str]]) -> PerdidoCollection:
         collection = PerdidoCollection()

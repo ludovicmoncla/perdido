@@ -92,9 +92,6 @@ def dump_edda_perdido() -> None:
     df = df.dropna()
     df = df.sort_values(['volume', 'number']).reset_index(drop = True)
     
-    #TODO remove this line
-    df = df.sample(3)
-
     geoparser = Geoparser(version = 'Encyclopedie')
     docs = geoparser(df.text)
 

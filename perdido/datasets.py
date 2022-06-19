@@ -29,11 +29,12 @@ def load_edda_perdido() -> Dict:
     
     return d
 
-def load_choucas_hikes():
+
+def load_choucas_hikes() -> None:
     pass
 
 
-def export_edda_artfl_as_csv():
+def export_edda_artfl_as_csv() -> None:
 
     path = '../datasets/edda_artfl/'
     data = []
@@ -47,7 +48,7 @@ def export_edda_artfl_as_csv():
     df.to_csv(path + 'edda_artf_dataset.csv', sep='\t', index=False)
 
 
-def get_data_from_artfl_tei(file_path: str, filename: str):
+def get_data_from_artfl_tei(file_path: str, filename: str) -> List[str]:
     file_id = filename[:-4]
     d = []
     try:
@@ -78,7 +79,7 @@ def get_data_from_artfl_tei(file_path: str, filename: str):
     return d
 
 
-def dump_edda_perdido():
+def dump_edda_perdido() -> None:
     
     input_path = '../datasets/edda_artfl/'
     data = []
@@ -90,8 +91,6 @@ def dump_edda_perdido():
     df = df.dropna()
     df = df.sort_values(['volume', 'number']).reset_index(drop = True)
 
-    
-    
     geoparser = Geoparser(version = 'Encyclopedie')
     docs = geoparser(df.text)
 

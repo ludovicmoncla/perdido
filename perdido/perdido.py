@@ -186,17 +186,9 @@ class PerdidoCollection:
         return self.data[index]
     
 
-    def __iter__(self):
-        self.index = 0
-        return self
- 
-
-    def __next__(self) -> Perdido:
-        if self.index < len(self.data):
-            d = self.data[self.index]
-            self.index += 1
-            return d
-        raise StopIteration
+    def __iter__(self) -> Iterator[Perdido]:
+        for d in self.data:
+            yield d
 
 
     def append(self, item: Perdido) -> None:
@@ -209,28 +201,54 @@ class PerdidoCollection:
 
 
     def to_dataframe(self) -> pd.DataFrame :
-        return pd.DataFrame(self.metadata)
+
+        #TODO add some columns such as number of entity of each type.
+        df = pd.DataFrame(self.metadata)
+        df['#_places'] = [len(doc.ne_place) for doc in self.data]
+        df['#_person'] = [len(doc.ne_person) for doc in self.data]
+        df['#_event'] = [len(doc.ne_event) for doc in self.data]
+        df['#_date'] = [len(doc.ne_date) for doc in self.data]
+        df['#_misc'] = [len(doc.ne_misc) for doc in self.data]
+        return df
 
 
     #TODO find a better name?
     def contains(self, tags: Union[str, List[str]]) -> PerdidoCollection:
         collection = PerdidoCollection()
 
-        for doc in self.data:
+        for index, doc in enumerate(self.data):
             
             if type(tags) == str:
                 if tags == 'place':
-                    collection.extend(doc.ne_place)
+                    if len(doc.ne_place) > 0:
+                        collection.append(doc)
                 elif tags == 'person':
-                    collection.extend(doc.ne_person)
+                    if len(doc.ne_person) > 0:
+                        collection.append(doc)
                 elif tags == 'event':
-                    collection.extend(doc.ne_event)
+                    if len(doc.ne_event) > 0:
+                        collection.append(doc)
                 elif tags == 'misc' or tags == 'other':
-                    collection.extend(doc.ne_misc)
-                else:
-                    pass
+                    if len(doc.ne_misc) > 0:
+                        collection.append(doc)
+                
+                collection.metadata.append(self.metadata[index])
             elif type(tags) == list:
-                pass
+                for tag in tags:
+                    if tag == 'place':
+                        if len(doc.ne_place) > 0:
+                            collection.append(doc)
+                    elif tag == 'person':
+                        if len(doc.ne_person) > 0:
+                            collection.append(doc)
+                    elif tag == 'event':
+                        if len(doc.ne_event) > 0:
+                            collection.append(doc)
+                    elif tag == 'misc' or tag == 'other':
+                        if len(doc.ne_misc) > 0:
+                            collection.append(doc)
+                    
+                    collection.metadata.append(self.metadata[index])
 
         return collection
 

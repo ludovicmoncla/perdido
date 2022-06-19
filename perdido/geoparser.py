@@ -52,8 +52,7 @@ class Geoparser:
             collection = PerdidoCollection()
             for c in content:
                 collection.append(self.call_perdido_ws(c))
-            else:
-                return collection
+            return collection
         else:
             return None
 

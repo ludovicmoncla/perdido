@@ -184,12 +184,7 @@ class PerdidoCollection:
 
     def __getitem__(self, index: int) -> Perdido:
         return self.data[index]
-
-
-    def __iter__(self) -> Iterator[Token]:
-        for t in self.tokens:
-            yield t
-
+    
 
     def __iter__(self):
         self.index = 0

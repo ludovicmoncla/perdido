@@ -12,7 +12,11 @@ perdido.egg-info/SOURCES.txt
 perdido.egg-info/dependency_links.txt
 perdido.egg-info/requires.txt
 perdido.egg-info/top_level.txt
-perdido/datasets/edda_artfl/edda_artf_dataset.csv
+perdido/data/__init__.py
+perdido/data/edda_artfl/__init__.py
+perdido/data/edda_artfl/edda_artf_dataset.csv
+perdido/data/edda_perdido/__init__.py
+perdido/data/edda_perdido/edda_perdido_dataset.pickle
 perdido/utils/__init__.py
 perdido/utils/map.py
 perdido/utils/utils.py

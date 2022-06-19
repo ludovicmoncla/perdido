@@ -1,6 +1,7 @@
 from typing import Any, List, Tuple, Union, Dict
 from lxml import etree
 import pkg_resources
+#import importlib.resources as pkg_resources
 import pandas as pd
 import os
 
@@ -10,7 +11,7 @@ from perdido.geoparser import Geoparser
 
 
 def load_edda_artfl() -> Dict:
-    filepath = pkg_resources.resource_stream(__name__, 'datasets/edda_artfl/edda_artf_dataset.csv')
+    filepath = pkg_resources.resource_stream(__name__, 'data/edda_artfl/edda_artf_dataset.csv')
     d = {}
     d['data'] = pd.read_csv(filepath, sep='\t')
     d['description'] = 'The description of the dataset will be available soon!'
@@ -20,7 +21,7 @@ def load_edda_artfl() -> Dict:
 
 
 def load_edda_perdido() -> Dict:
-    filepath = pkg_resources.resource_stream(__name__, 'datasets/edda_perdido/edda_perdido_dataset.pickle')
+    filepath = pkg_resources.resource_filename(__name__, 'data/edda_perdido/edda_perdido_dataset.pickle')
     d = {}
     collection = PerdidoCollection()
     collection.load(filepath)
@@ -36,7 +37,7 @@ def load_choucas_hikes() -> None:
 
 def export_edda_artfl_as_csv() -> None:
 
-    path = '../datasets/edda_artfl/'
+    path = '../data/edda_artfl/'
     data = []
     for doc in os.listdir(path):
         if doc[-4:] == '.tei':
@@ -81,7 +82,7 @@ def get_data_from_artfl_tei(file_path: str, filename: str) -> List[str]:
 
 def dump_edda_perdido() -> None:
     
-    input_path = '../datasets/edda_artfl/'
+    input_path = '/Users/lmoncla/git/github.com/lmoncla/perdido/perdido/data/edda_artfl/'
     data = []
     for doc in os.listdir(input_path):
         if doc[-4:] == '.tei':
@@ -90,6 +91,9 @@ def dump_edda_perdido() -> None:
     df = pd.DataFrame(data, columns=['filename', 'volume', 'number', 'head', 'normClass', 'author', 'text'])
     df = df.dropna()
     df = df.sort_values(['volume', 'number']).reset_index(drop = True)
+    
+    #TODO remove this line
+    df = df.sample(3)
 
     geoparser = Geoparser(version = 'Encyclopedie')
     docs = geoparser(df.text)
@@ -98,6 +102,6 @@ def dump_edda_perdido() -> None:
     
     docs.metadata = df.to_dict('records')
 
-    ouput_path = '../datasets/edda_perdido/'
+    ouput_path = '/Users/lmoncla/git/github.com/lmoncla/perdido/perdido/data/edda_perdido/'
     docs.dump(ouput_path + 'edda_perdido_dataset.pickle')
     

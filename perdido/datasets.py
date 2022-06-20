@@ -20,31 +20,16 @@ def load_edda_artfl() -> Dict:
     return d
 
 
-def load_edda_perdido(volume: str ='all') -> Dict:
+def load_edda_perdido() -> Dict:
     d = {}
     collection = PerdidoCollection()
-    if volume == 'all':
-        for vol in range(1,18):
-            if vol < 10:
-                vol_n = '0' + str(vol)
-            else:
-                vol_n = str(vol)
-            filepath = pkg_resources.resource_filename(__name__, 'data/edda_perdido/edda_perdido_dataset' + vol_n + '.pickle')
-            tmp = PerdidoCollection()
-            tmp.load(filepath)
-            collection.extend(tmp)
-
-        d['data'] = collection
-        d['description'] = 'The description of the dataset will be available soon!'
-       
-    else:
-        filepath = pkg_resources.resource_filename(__name__, 'data/edda_perdido/edda_perdido_dataset_' + volume + '.pickle')
-   
-        
-        collection.load(filepath)
-        
-        d['data'] = collection
-        d['description'] = 'The description of the dataset will be available soon!'
+    
+    filepath = pkg_resources.resource_filename(__name__, 'data/edda_perdido/edda_perdido_dataset.pickle')
+    
+    collection.load(filepath)
+    
+    d['data'] = collection
+    d['description'] = 'The description of the dataset will be available soon!'
     
     return d
 
@@ -101,28 +86,25 @@ def get_data_from_artfl_tei(file_path: str, filename: str) -> List[str]:
 def dump_edda_perdido() -> None:
     input_path = '/Users/lmoncla/Documents/Data/Corpus/EDDA/articles_all/test/'
     #input_path = '/Users/lmoncla/git/github.com/lmoncla/perdido/perdido/data/edda_artfl/'
-    volumes = {}
-    volume = 'volume00'
+    data = []
+    volume = 'volume01'
     for doc in os.listdir(input_path):
         if doc[-4:] == '.tei':
             if doc[:8] == volume:
-                volumes[volume].append(get_data_from_artfl_tei(input_path, doc))
-            else:
-                volume = doc[:8]
-                volumes[volume] = []
+                data.append(get_data_from_artfl_tei(input_path, doc))
+            
+
+    df = pd.DataFrame(data, columns=['filename', 'volume', 'number', 'head', 'normClass', 'author', 'text'])
+    df = df.dropna()
+    df = df.sort_values(['volume', 'number']).reset_index(drop = True)
     
-    for volume, data in volumes.items():
-        df = pd.DataFrame(data, columns=['filename', 'volume', 'number', 'head', 'normClass', 'author', 'text'])
-        df = df.dropna()
-        df = df.sort_values(['volume', 'number']).reset_index(drop = True)
-        
-        geoparser = Geoparser(version = 'Encyclopedie')
-        docs = geoparser(df.text)
+    geoparser = Geoparser(version = 'Encyclopedie')
+    docs = geoparser(df.text)
 
-        df = df.drop(['text'], axis=1)
-        
-        docs.metadata = df.to_dict('records')
+    df = df.drop(['text'], axis=1)
+    
+    docs.metadata = df.to_dict('records')
 
-        ouput_path = '/Users/lmoncla/git/github.com/lmoncla/perdido/perdido/data/edda_perdido/'
-        docs.dump(ouput_path + 'edda_perdido117_dataset_' + volume + '.pickle')
+    ouput_path = '/Users/lmoncla/git/github.com/lmoncla/perdido/perdido/data/edda_perdido/'
+    docs.dump(ouput_path + 'edda_perdido_dataset.pickle')
     

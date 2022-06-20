@@ -196,8 +196,9 @@ class PerdidoCollection:
             self.data.append(item)
 
 
-    def extend(self, items: List[Perdido]) -> None:
-        self.data.extend(items)
+    def extend(self, collection: PerdidoCollection) -> None:
+        self.data.extend(collection.data)
+        self.metadata.extend(collection.metadata)
 
 
     def to_dataframe(self) -> pd.DataFrame :

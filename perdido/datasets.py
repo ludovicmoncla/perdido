@@ -87,7 +87,7 @@ def dump_edda_perdido() -> None:
     input_path = '/Users/lmoncla/Documents/Data/Corpus/EDDA/articles_all/test/'
     #input_path = '/Users/lmoncla/git/github.com/lmoncla/perdido/perdido/data/edda_artfl/'
     data = []
-    volume = 'volume01'
+    volume = 'volume07'
     for doc in os.listdir(input_path):
         if doc[-4:] == '.tei':
             if doc[:8] == volume:

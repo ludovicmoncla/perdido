@@ -17,7 +17,7 @@ class Geocoder:
             self.sources = sources
         else:
             self.sources = {'nominatim' : True}
-            
+        
         self.max_rows = max_rows
         self.alt_names = alt_names
 

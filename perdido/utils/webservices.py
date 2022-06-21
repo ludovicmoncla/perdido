@@ -15,11 +15,13 @@ class WebService():
         self.result = None
 
 
-    def post(self, service: str, params: Dict[str, Any], data : Dict[str, Any]) -> None:
+    def post(self, service: str, params: Dict[str, Any], data : Union[Dict[str, Any], None] = None) -> None:
         self._parameters = params
-        self._data = data
-         # param for get style request
-        self.result = requests.post(self._url_api + service, params=self._parameters, json=self._data)
+        if data is not None:
+            self._data = data
+            self.result = requests.post(self._url_api + service, params=self._parameters, json=self._data)
+        else:
+            self.result = requests.post(self._url_api + service, params=self._parameters)
 
 
     def get_result(self, field: str = 'result', output_format: str = 'json') -> Union[Tuple[bool, str], None]:

@@ -21,7 +21,7 @@ def load_edda_perdido(dataset:str = 'nominatim') -> Dict:
     d = {}
     collection = PerdidoCollection()
     
-    filepath = pkg_resources.resource_filename(__name__, 'data/edda_perdido/' + dataset + '/edda_perdido_vol7_' + dataset +'_dataset.pickle')
+    filepath = pkg_resources.resource_filename(__name__, 'data/edda_perdido/edda_perdido_vol7_' + dataset +'_dataset.pickle')
     
     collection.load(filepath)
     

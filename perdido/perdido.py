@@ -13,7 +13,7 @@ from perdido.utils.map import overlay_gpx, get_bounding_box
 from spacy.tokens import Span
 from spacy.tokens import Doc
 from spacy.vocab import Vocab
-import spacy
+import json
 import pickle
 
 import pandas as pd
@@ -205,12 +205,17 @@ class PerdidoCollection:
 
         #TODO add some columns such as number of entity of each type.
         df = pd.DataFrame(self.metadata)
+        df['text'] = [doc.text for doc in self.data]
         df['#_places'] = [len(doc.ne_place) for doc in self.data]
         df['#_person'] = [len(doc.ne_person) for doc in self.data]
         df['#_event'] = [len(doc.ne_event) for doc in self.data]
         df['#_date'] = [len(doc.ne_date) for doc in self.data]
         df['#_misc'] = [len(doc.ne_misc) for doc in self.data]
         return df
+
+
+    def to_geojson(self):
+        pass
 
 
     #TODO find a better name?
@@ -266,8 +271,45 @@ class PerdidoCollection:
 
 
     # filter on metadata
-    def filter(self) -> PerdidoCollection:
-        pass
+    def keyword_search(self, keyword: str) -> PerdidoCollection:   
+        data = [doc for doc in self.data if keyword in doc.text]
+        metadata = [self.metadata[key]  for key, doc in enumerate(self.data) if keyword in doc.text]
+        return PerdidoCollection(data, metadata)
+
+
+    # filter on metadata
+    def filter_equal(self, column: str, value: str) -> PerdidoCollection:
+        data = [self[k] for k, d in enumerate(self.metadata) if d[column] == value]
+        metadata = [d for d in self.metadata if d[column] == value]
+        return PerdidoCollection(data, metadata)
+    
+    
+    # filter on metadata
+    def filter_in(self, column: str, values: List[str]) -> PerdidoCollection:
+        data = [self[k] for k, d in enumerate(self.metadata) if d[column] in values]
+        metadata = [d for d in self.metadata if d[column] in values]
+        return PerdidoCollection(data, metadata)
+
+
+    def get_folium_map(self, properties: Union[List[str], None] = ['name', 'source'], gpx: Union[str , None] = None) -> Union[folium.Map,str]:
+        m = folium.Map()
+        if gpx is not None:
+            overlay_gpx(m, gpx)
+
+        for doc in self.data:
+            if doc.geojson is not None:
+                if type(doc.geojson) == str:
+                    doc.geojson = json.loads(doc.geojson)
+                if len(doc.geojson["features"]) > 0:
+                    coords = list(geojson.utils.coords(doc.geojson))
+                    if len(coords) > 0:
+                        m.fit_bounds(get_bounding_box(coords))
+                        if properties is not None:
+                            folium.GeoJson(doc.geojson, name='Toponyms', tooltip=folium.features.GeoJsonTooltip(fields=properties, localize=True)).add_to(m)
+                        else:
+                            folium.GeoJson(doc.geojson, name='Toponyms').add_to(m)
+                        return m
+        return 'No location found!'
 
 
     def dump(self, filepath: str) -> None:

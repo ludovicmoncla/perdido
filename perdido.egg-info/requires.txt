@@ -5,3 +5,4 @@ geojson
 gpxpy
 pandas
 spacy>=3.3.0
+jupyter

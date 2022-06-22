@@ -211,57 +211,12 @@ class PerdidoCollection:
         df['#_event'] = [len(doc.ne_event) for doc in self.data]
         df['#_date'] = [len(doc.ne_date) for doc in self.data]
         df['#_misc'] = [len(doc.ne_misc) for doc in self.data]
+        df['#_locations'] = [len(doc.toponyms) for doc in self.data]
         return df
 
 
     def to_geojson(self):
         pass
-
-
-    #TODO find a better name?
-    def contains(self, tags: Union[str, List[str]]) -> PerdidoCollection:
-        collection = PerdidoCollection()
-
-        for index, doc in enumerate(self.data):
-            
-            if type(tags) == str:
-                if tags == 'place':
-                    if len(doc.ne_place) > 0:
-                        collection.append(doc)
-                        collection.metadata.append(self.metadata[index])
-                elif tags == 'person':
-                    if len(doc.ne_person) > 0:
-                        collection.append(doc)
-                        collection.metadata.append(self.metadata[index])
-                elif tags == 'event':
-                    if len(doc.ne_event) > 0:
-                        collection.append(doc)
-                        collection.metadata.append(self.metadata[index])
-                elif tags == 'misc' or tags == 'other':
-                    if len(doc.ne_misc) > 0:
-                        collection.append(doc)
-                        collection.metadata.append(self.metadata[index])
-                
-            elif type(tags) == list:
-                for tag in tags:
-                    if tag == 'place':
-                        if len(doc.ne_place) > 0:
-                            collection.append(doc)
-                            collection.metadata.append(self.metadata[index])
-                    elif tag == 'person':
-                        if len(doc.ne_person) > 0:
-                            collection.append(doc)
-                            collection.metadata.append(self.metadata[index])
-                    elif tag == 'event':
-                        if len(doc.ne_event) > 0:
-                            collection.append(doc)
-                            collection.metadata.append(self.metadata[index])
-                    elif tag == 'misc' or tag == 'other':
-                        if len(doc.ne_misc) > 0:
-                            collection.append(doc)
-                            collection.metadata.append(self.metadata[index])
-
-        return collection
 
 
     #TODO find a better name?
@@ -282,6 +237,61 @@ class PerdidoCollection:
         data = [self[k] for k, d in enumerate(self.metadata) if d[column] == value]
         metadata = [d for d in self.metadata if d[column] == value]
         return PerdidoCollection(data, metadata)
+
+
+    # filter on metadata
+    # TODO: catch KeyError exception
+    def filter_gt(self, column: str, value: int) -> PerdidoCollection:
+        if column in ['#_locations', '#_places', '#_person', '#_date', '#_event', '#_misc']:
+            if column == '#_locations':
+                data = [d for d in self.data if len(d.toponyms) > value]
+                metadata = [self.metadata[k] for k, d in enumerate(self.data) if len(d.toponyms) > value]
+            if column == '#_places':
+                data = [d for d in self.data if len(d.ne_place) > value]
+                metadata = [self.metadata[k] for k, d in enumerate(self.data) if len(d.ne_place) > value]
+            if column == '#_person':
+                data = [d for d in self.data if len(d.ne_person) > value]
+                metadata = [self.metadata[k] for k, d in enumerate(self.data) if len(d.ne_person) > value]
+            if column == '#_event':
+                data = [d for d in self.data if len(d.ne_event) > value]
+                metadata = [self.metadata[k] for k, d in enumerate(self.data) if len(d.ne_event) > value]
+            if column == '#_date':
+                data = [d for d in self.data if len(d.ne_date) > value]
+                metadata = [self.metadata[k] for k, d in enumerate(self.data) if len(d.ne_date) > value]
+            if column == '#_misc':
+                data = [d for d in self.data if len(d.ne_misc) > value]
+                metadata = [self.metadata[k] for k, d in enumerate(self.data) if len(d.ne_misc) > value]
+        else:
+            data = [self[k] for k, d in enumerate(self.metadata) if d[column] > value]
+            metadata = [d for d in self.metadata if d[column] > value]
+        return PerdidoCollection(data, metadata)
+
+
+    # filter on metadata
+    def filter_lt(self, column: str, value: int) -> PerdidoCollection:
+        if column in ['#_locations', '#_places', '#_person', '#_date', '#_event', '#_misc']:
+            if column == '#_locations':
+                data = [d for d in self.data if len(d.toponyms) > value]
+                metadata = [self.metadata[k] for k, d in enumerate(self.data) if len(d.toponyms) < value]
+            if column == '#_places':
+                data = [d for d in self.data if len(d.ne_place) < value]
+                metadata = [self.metadata[k] for k, d in enumerate(self.data) if len(d.ne_place) < value]
+            if column == '#_person':
+                data = [d for d in self.data if len(d.ne_person) < value]
+                metadata = [self.metadata[k] for k, d in enumerate(self.data) if len(d.ne_person) < value]
+            if column == '#_event':
+                data = [d for d in self.data if len(d.ne_event) < value]
+                metadata = [self.metadata[k] for k, d in enumerate(self.data) if len(d.ne_event) < value]
+            if column == '#_date':
+                data = [d for d in self.data if len(d.ne_date) < value]
+                metadata = [self.metadata[k] for k, d in enumerate(self.data) if len(d.ne_date) < value]
+            if column == '#_misc':
+                data = [d for d in self.data if len(d.ne_misc) < value]
+                metadata = [self.metadata[k] for k, d in enumerate(self.data) if len(d.ne_misc) < value]
+        else:
+            data = [self[k] for k, d in enumerate(self.metadata) if d[column] < value]
+            metadata = [d for d in self.metadata if d[column] < value]
+        return PerdidoCollection(data, metadata)
     
     
     # filter on metadata
@@ -295,7 +305,7 @@ class PerdidoCollection:
         m = folium.Map()
         if gpx is not None:
             overlay_gpx(m, gpx)
-
+        res = False
         for doc in self.data:
             if doc.geojson is not None:
                 if type(doc.geojson) == str:
@@ -308,7 +318,9 @@ class PerdidoCollection:
                             folium.GeoJson(doc.geojson, name='Toponyms', tooltip=folium.features.GeoJsonTooltip(fields=properties, localize=True)).add_to(m)
                         else:
                             folium.GeoJson(doc.geojson, name='Toponyms').add_to(m)
-                        return m
+                        res = True
+        if res:                
+            return m
         return 'No location found!'
 
 

@@ -223,33 +223,38 @@ class PerdidoCollection:
                 if tags == 'place':
                     if len(doc.ne_place) > 0:
                         collection.append(doc)
+                        collection.metadata.append(self.metadata[index])
                 elif tags == 'person':
                     if len(doc.ne_person) > 0:
                         collection.append(doc)
+                        collection.metadata.append(self.metadata[index])
                 elif tags == 'event':
                     if len(doc.ne_event) > 0:
                         collection.append(doc)
+                        collection.metadata.append(self.metadata[index])
                 elif tags == 'misc' or tags == 'other':
                     if len(doc.ne_misc) > 0:
                         collection.append(doc)
+                        collection.metadata.append(self.metadata[index])
                 
-                collection.metadata.append(self.metadata[index])
             elif type(tags) == list:
                 for tag in tags:
                     if tag == 'place':
                         if len(doc.ne_place) > 0:
                             collection.append(doc)
+                            collection.metadata.append(self.metadata[index])
                     elif tag == 'person':
                         if len(doc.ne_person) > 0:
                             collection.append(doc)
+                            collection.metadata.append(self.metadata[index])
                     elif tag == 'event':
                         if len(doc.ne_event) > 0:
                             collection.append(doc)
+                            collection.metadata.append(self.metadata[index])
                     elif tag == 'misc' or tag == 'other':
                         if len(doc.ne_misc) > 0:
                             collection.append(doc)
-                    
-                    collection.metadata.append(self.metadata[index])
+                            collection.metadata.append(self.metadata[index])
 
         return collection
 

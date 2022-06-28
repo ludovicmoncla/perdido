@@ -34,12 +34,12 @@ from perdido.geoparser import Geoparser
 
 #### Run geoparser
 
-* The `version` parameter can take 2 values: Standard (default), Encyclopedie.
-
 ```python
 geoparser = Geoparser(version='Standard')
 doc = geoparser('Je visite la ville de Lyon, Annecy et Chamonix.')
 ```
+
+* The `version` parameter can take 2 values: *Standard* (default), *Encyclopedie*.
 
 #### Get tokens
 

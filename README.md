@@ -61,7 +61,7 @@ for token in doc:
 
 ```python
 for token in doc:
-    print(token.iob_format())
+    print(token.tsv_format())
 ```
 
 #### Print the XML-TEI output

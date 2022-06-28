@@ -41,9 +41,25 @@ doc = geoparser('Je visite la ville de Lyon, Annecy et Chamonix.')
 
 #### Get tokens
 
+* Access token attributes:
+
 ```python
 for token in doc:
     print(f'{token.text}\tlemma: {token.lemma}\tpos: {token.pos}')
+```
+
+* Get the IOB format:
+
+```python
+for token in doc:
+    print(token.iob_format())
+```
+
+* Get a TSV-IOB format:
+
+```python
+for token in doc:
+    print(token.iob_format())
 ```
 
 #### Print the XML-TEI output

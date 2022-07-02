@@ -55,8 +55,10 @@ class Perdido:
 
 
     def to_xml(self, path: str) -> None:
-        tree = etree.ElementTree(etree.fromstring(self.tei))
-        tree.write(path)
+        #tree = etree.ElementTree(etree.fromstring(self.tei))
+        #tree.write(path)
+        with open(path, 'w') as f:
+            f.write(self.tei)
 
 
     def to_geojson(self, path: str) -> None:

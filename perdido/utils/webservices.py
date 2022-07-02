@@ -29,7 +29,8 @@ class WebService():
             if json.loads(self.result.text)['status'] == "success":
                 if output_format == 'xml':
                     parser = etree.XMLParser(ns_clean=True, remove_blank_text=True)
-                    return True, etree.tostring(etree.parse(StringIO(json.loads(self.result.text)[field]), parser), pretty_print=True, method="html").decode('utf-8')
+                    #return True, etree.tostring(etree.parse(StringIO(json.loads(self.result.text)[field]), parser), pretty_print=True, method="html").decode('utf-8')
+                    return True, etree.tostring(etree.parse(StringIO(json.loads(self.result.text)[field]), parser), encoding='unicode')
                     #return ast.literal_eval(json.dumps())
                 #elif outputFormat == 'xml':
                 #    return  etree.tostring(etree.XML(json.loads(jsonStr.text)[field]), pretty_print=True)

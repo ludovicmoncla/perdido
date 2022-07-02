@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: perdido
-Version: 0.1.22
+Version: 0.1.23
 Summary: PERDIDO Geoparser python library
 Home-page: https://github.com/ludovicmoncla/perdido
 Author: Ludovic Moncla
@@ -52,15 +52,33 @@ from perdido.geoparser import Geoparser
 #### Run geoparser
 
 ```python
-geoparser = Geoparser(lang='fr')
+geoparser = Geoparser(version='Standard')
 doc = geoparser('Je visite la ville de Lyon, Annecy et Chamonix.')
 ```
 
+* The `version` parameter can take 2 values: *Standard* (default), *Encyclopedie*.
+
 #### Get tokens
+
+* Access token attributes:
 
 ```python
 for token in doc:
     print(f'{token.text}\tlemma: {token.lemma}\tpos: {token.pos}')
+```
+
+* Get the IOB format:
+
+```python
+for token in doc:
+    print(token.iob_format())
+```
+
+* Get a TSV-IOB format:
+
+```python
+for token in doc:
+    print(token.tsv_format())
 ```
 
 #### Print the XML-TEI output

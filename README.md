@@ -118,6 +118,10 @@ doc.to_geojson('filename.geojson')
 ```
 
 ```python
+doc.to_iob('filename.tsv')
+```
+
+```python
 doc.to_csv('filename.csv')
 ```
 

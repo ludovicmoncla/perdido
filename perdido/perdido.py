@@ -71,6 +71,18 @@ class Perdido:
         df.to_csv(path, sep=sep)
 
 
+    def to_iob(self, path: str, sep: str = '\t') -> None:
+        content = ''
+        for token in self:
+            if sep == '\t':
+                content += token.tsv_format() + '\n'
+            elif sep == ' ':
+                content += token.iob_format() + '\n'
+
+        with open(path, 'w') as f:
+            f.write(content)
+
+
     def parse_tei(self) -> None:
         if self.tei is not None:
             root = etree.fromstring(self.tei)

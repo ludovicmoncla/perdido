@@ -46,9 +46,9 @@ class Token:
     def tsv_format(self) -> str:
         if len(self.tags) > 0:
             tags = '\t'.join(self.tags)
-            return f'{self.id+1}\t{self.text}\t{self.lemma}\t{self.pos}\t{tags}'
+            return f'{self.id}\t{self.text}\t{self.lemma}\t{self.pos}\t{tags}'
         else:
-            return f'{self.id+1}\t{self.text}\t{self.lemma}\t{self.pos}'
+            return f'{self.id}\t{self.text}\t{self.lemma}\t{self.pos}'
 
 
     def iob_format(self) -> str:

@@ -86,7 +86,10 @@ class Entity:
         self.lng = toponym_candidates[0].lng if len(toponym_candidates) > 0 else None
         self.toponyms_candidate = toponym_candidates
 
-      # position, start, end ?
+        # position, start, end ?
+        if len(tokens) > 0:
+            self.start_offset = tokens[0].id
+            self.end_offset = tokens[-1].id
         #self.sent = sent # sentence in which the entity occurs, useful?
         #...
 
@@ -146,16 +149,26 @@ def get_tokens_from_tei(elt: Element) -> List[Token]:
                         else:
                             tag = 'I-'
 
+                        
                         type = p.get('type') if 'type' in p.attrib else  None
                         if type is not None:
                             if type == 'place':
-                                tag += 'LOCATION'
+                                tag += 'LOC'
                             elif type == 'person':
-                                tag += 'PERSON'
+                                tag += 'PER'
                             elif type == 'date':
                                 tag += 'DATE'
                             else:
                                 tag += 'OTHER'
+                        
+                        # recuperer le niveau dimbrication
+                        # subtype="no" | subtype="ene"
+                        subtype = p.get('subtype') if 'subtype' in p.attrib else  None
+                        if subtype is not None:
+                            #if subtype == 'no':
+                            #    tag += ''
+                            if subtype == 'ene':
+                                tag += '-NNE'
 
                         tags.append(tag)
         except StopIteration:

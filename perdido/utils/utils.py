@@ -29,12 +29,14 @@ class Toponym:
 
 
 class Token:
-    def __init__(self, id: str, text: str, lemma: Union[str, None] = None, pos: Union[str, None] = None, tags: List[str] = []) -> None:
+    def __init__(self, id: str, text: str, idx: int, lemma: Union[str, None] = None, pos: Union[str, None] = None, tags: List[str] = []) -> None:
         self.id = id
         self.text = text
         self.lemma = lemma
         self.pos = pos
         self.tags = tags
+
+        self.idx = idx # The character offset of the token within the parent document.
 
         # tag CONLL-U / BIO NE and NNE ?
 
@@ -90,6 +92,9 @@ class Entity:
         if len(tokens) > 0:
             self.start_offset = tokens[0].id
             self.end_offset = tokens[-1].id
+        else:
+            self.start_offset = None
+            self.end_offset = None
         #self.sent = sent # sentence in which the entity occurs, useful?
         #...
 

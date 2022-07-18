@@ -133,6 +133,7 @@ def get_tokens_from_tei(elt: Element) -> List[Token]:
         pos = elt.get('pos') if 'pos' in elt.attrib else ""
 
         id = int(elt.get('id')[1:]) if 'id' in elt.attrib else None
+        idx = int(elt.get('idx')) if 'idx' in elt.attrib else None
 
         tags = []
     
@@ -184,7 +185,7 @@ def get_tokens_from_tei(elt: Element) -> List[Token]:
 
         tags.reverse()
 
-        tokens.append(Token(id+1, elt.text, lemma, pos, tags))
+        tokens.append(Token(id+1, elt.text, idx, lemma, pos, tags))
     return tokens
 
 

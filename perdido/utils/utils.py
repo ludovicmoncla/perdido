@@ -126,6 +126,10 @@ def parent_exists(elt: Element, parent_name: Element) -> bool:
         return False
 
 
+def get_tokens_from_webanno() -> List[Token]:
+    pass
+
+
 def get_tokens_from_tei(elt: Element) -> List[Token]:
     tokens = []
     for elt in elt.findall('.//w'):

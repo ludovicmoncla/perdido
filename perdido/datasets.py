@@ -17,23 +17,28 @@ def load_edda_artfl() -> Dict:
     return d
 
 
+
 def load_edda_perdido(dataset:str = 'nominatim') -> Dict:
+    description = 'The description of the dataset will be available soon!'
+    return load_pickle_perdidocollection('data/edda_perdido/edda_perdido_vol7_' + dataset +'_dataset.pickle', description)
+
+
+def load_choucas_perdido() -> Dict:
+    description = 'The description of the dataset will be available soon!'
+    return load_pickle_perdidocollection('data/choucas/choucas_perdido_dataset.pickle', description)
+
+
+def load_pickle_perdidocollection(path:str, description:str) -> Dict:
+    filepath = pkg_resources.resource_stream(__name__, path)
+    
     d = {}
     collection = PerdidoCollection()
-    
-    filepath = pkg_resources.resource_filename(__name__, 'data/edda_perdido/edda_perdido_vol7_' + dataset +'_dataset.pickle')
-    
     collection.load(filepath)
     
     d['data'] = collection
-    d['description'] = 'The description of the dataset will be available soon!'
-    
+    d['description'] = description
+
     return d
-
-
-def load_choucas_hikes() -> None:
-    pass
-
 
 
 

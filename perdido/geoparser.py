@@ -44,20 +44,20 @@ class Geoparser:
         return self.parse(content)
 
 
-    def parse(self, content: Union[str, List[str], Series]) -> Union[Perdido, PerdidoCollection, None]:
+    def parse(self, content: Union[str, List[str], Series], geom = None) -> Union[Perdido, PerdidoCollection, None]:
         
         if type(content) == str:
-            return self.call_perdido_ws(content)
+            return self.call_perdido_ws(content, geom)
         elif type(content) == list or type(content) == Series:
             collection = PerdidoCollection()
             for c in content:
-                collection.append(self.call_perdido_ws(c))
+                collection.append(self.call_perdido_ws(c, geom))
             return collection
         else:
             return None
 
         
-    def call_perdido_ws(self, content: str) -> Perdido:
+    def call_perdido_ws(self, content: str, geom = None) -> Perdido:
         try:
             ws = WebService()
 
@@ -81,6 +81,7 @@ class Geoparser:
 
             res = Perdido()
             res.text = content
+            res.geometry_layer = geom
 
             success, val = ws.get_result('xml-tei', 'xml')
             if success:
@@ -98,3 +99,5 @@ class Geoparser:
         except ConnectionError as e:
             print(e)
             return None
+
+

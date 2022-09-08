@@ -17,6 +17,7 @@ import json
 import pickle
 
 import pandas as pd
+import geopandas as gpd
 
 
 class Perdido:
@@ -27,6 +28,7 @@ class Perdido:
         self.text = None
         self.tei = None
         self.geojson = None 
+        self.geometry_layer = None 
         
         self.tokens = []
 
@@ -111,6 +113,10 @@ class Perdido:
         m = folium.Map()
         if gpx is not None:
             overlay_gpx(m, gpx)
+
+        if self.geometry_layer is not None:
+            folium.GeoJson(data=gpd.GeoSeries(self.geometry_layer).to_json()).add_to(m)
+
 
         if self.geojson is not None:
             coords = list(geojson.utils.coords(self.geojson))

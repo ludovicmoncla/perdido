@@ -13,6 +13,7 @@ perdido.egg-info/dependency_links.txt
 perdido.egg-info/requires.txt
 perdido.egg-info/top_level.txt
 perdido/data/__init__.py
+perdido/data/choucas/choucas_perdido.pickle
 perdido/data/edda_artfl/edda_artf_dataset.csv
 perdido/data/edda_perdido/edda_perdido_vol7_nominatim_dataset.pickle
 perdido/data/edda_perdido/edda_perdido_vol7_pleiades_dataset.pickle

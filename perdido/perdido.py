@@ -27,8 +27,12 @@ class Perdido:
 
         self.text = None
         self.tei = None
+
         self.geojson = None 
-        self.geometry_layer = None 
+        self.geojson_ambiguous = None 
+        self.best_cluster = None
+
+        self.geometry_layer = None # GPX track
         
         self.tokens = []
 
@@ -45,6 +49,8 @@ class Perdido:
         self.nominal_entities = []
         
         self.toponyms = []
+
+        
 
 
     def __iter__(self) -> Iterator[Token]:
@@ -105,10 +111,10 @@ class Perdido:
 
     def parse_geojson(self) -> None:
         if self.geojson is not None:
-           
-            self.toponyms = get_toponyms_from_geojson(self.geojson)  
+            self.toponyms = get_toponyms_from_geojson(self.geojson)
            
 
+    # ajouter un param pour tenir compte du best cluster
     def get_folium_map(self, properties: Union[List[str], None] = ['name', 'source'], gpx: Union[str , None] = None) -> Union[folium.Map,None]:
         m = folium.Map()
         if gpx is not None:

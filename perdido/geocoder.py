@@ -63,7 +63,14 @@ class Geocoder:
         else:
             print(val)
 
+
+        if self.disambiguation == 'cluster':
+            res.geojson, res.geojson_ambiguous, res.best_cluster = clustering_disambiguation(res)
+
+
         # TODO:    res.toponyms
         res.parse_geojson()
+
+       
 
         return res

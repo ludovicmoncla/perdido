@@ -1,4 +1,5 @@
 from typing import Iterator, List, Dict, Union
+from perdido.utils.disambiguation import clustering_disambiguation
 from perdido.utils.webservices import WebService
 from perdido.perdido import Perdido
 

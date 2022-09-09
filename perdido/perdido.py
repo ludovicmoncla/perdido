@@ -199,7 +199,7 @@ class Perdido:
 
 
     def cluster_disambiguation(self) -> None:
-        res.geojson, res.geojson_ambiguous, res.best_cluster = clustering_disambiguation(res)
+        self.geojson, self.geojson_ambiguous, self.best_cluster = clustering_disambiguation(self)
 
 
 

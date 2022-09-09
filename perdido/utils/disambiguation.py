@@ -3,7 +3,7 @@ from sklearn.cluster import DBSCAN
 import pandas as pd
 
 
-def geojson2df(resJson: Dict) -> pd.DataFrame:
+def geojson2df(resJson: Dict):
 
     lst = []
     for t in resJson['features']:
@@ -20,28 +20,28 @@ def geojson2df(resJson: Dict) -> pd.DataFrame:
     return pd.DataFrame(lst, columns =['xmlID', 'name', 'source', 'sourceName', 'country', 'latitude', 'longitude'])
 
 
- def df2geojson(df, properties, lat='latitude', lon='longitude'):
-        geojson = {'type':'FeatureCollection', 'features':[]}
+def df2geojson(df, properties, lat='latitude', lon='longitude'):
+    geojson = {'type':'FeatureCollection', 'features':[]}
 
-        # loop through each row in the dataframe and convert each row to geojson format
-        for _, row in df.iterrows():
-            # create a feature template to fill in
-            feature = {'type':'Feature',
-                    'properties':{},
-                    'geometry':{'type':'Point',
-                                'coordinates':[]}}
+    # loop through each row in the dataframe and convert each row to geojson format
+    for _, row in df.iterrows():
+        # create a feature template to fill in
+        feature = {'type':'Feature',
+                'properties':{},
+                'geometry':{'type':'Point',
+                            'coordinates':[]}}
 
-            # fill in the coordinates
-            feature['geometry']['coordinates'] = [row[lon],row[lat]]
+        # fill in the coordinates
+        feature['geometry']['coordinates'] = [row[lon],row[lat]]
 
-            # for each column, get the value and add it as a new feature property
-            for prop in properties:
-                feature['properties'][prop] = row[prop]
-            
-            # add this feature (aka, converted dataframe row) to the list of features inside our dict
-            geojson['features'].append(feature)
+        # for each column, get the value and add it as a new feature property
+        for prop in properties:
+            feature['properties'][prop] = row[prop]
         
-        return geojson
+        # add this feature (aka, converted dataframe row) to the list of features inside our dict
+        geojson['features'].append(feature)
+    
+    return geojson
 
 
 def clustering_disambiguation(p):

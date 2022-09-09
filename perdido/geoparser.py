@@ -39,6 +39,8 @@ class Geoparser:
         else:
             self.bbox = None
 
+        self.disambiguation = None
+
 
     def __call__(self, content: Union[str, List[str], Series]) -> Union[Perdido, PerdidoCollection, None]:
         return self.parse(content)
@@ -92,6 +94,9 @@ class Geoparser:
                     res.geojson = val
             else:
                 print(val)
+
+            if self.disambiguation == 'cluster':
+                res.geojson, res.geojson_ambiguous, res.best_cluster = clustering_disambiguation(res)
 
             res.parse_tei()
 

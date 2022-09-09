@@ -9,6 +9,7 @@ import geojson
 from perdido.utils.utils import Token, Entity
 from perdido.utils.utils import get_tokens_from_tei, get_entities_from_tei, get_toponyms_from_tei, get_nested_entities_from_tei, get_toponyms_from_geojson, parent_exists
 from perdido.utils.map import overlay_gpx, get_bounding_box
+from perdido.utils.disambiguation import clustering_disambiguation
 
 from spacy.tokens import Span
 from spacy.tokens import Doc
@@ -195,6 +196,11 @@ class Perdido:
             data.append([name, tag, lat, lng, toponym_candidates])
 
         return pd.DataFrame(data, columns=['name', 'tag', 'lat', 'lng', 'toponym_candidates'])
+
+
+    def cluster_disambiguation(self) -> None:
+        res.geojson, res.geojson_ambiguous, res.best_cluster = clustering_disambiguation(res)
+
 
 
 class PerdidoCollection:

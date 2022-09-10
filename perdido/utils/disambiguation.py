@@ -48,13 +48,15 @@ def clustering_disambiguation(p):
 
     df = geojson2df(p.geojson)
     data = df.loc[:,['latitude', 'longitude']]
+    if len(data) >= 3:
+        clusterer = DBSCAN(eps=0.1)
 
-    clusterer = DBSCAN(eps=0.1)
-
-    df["cluster"] = clusterer.fit_predict(data)
-
-    best_cluster = df[df.cluster != -1].cluster.value_counts().idxmax()
-    #df['cluster'] = np.where(df['cluster'] == bestCluster, bestCluster, -1)
-    df2 = df[df.cluster == best_cluster].reset_index(drop=True)
-
-    return df2geojson(df2, df2.columns), df2geojson(df, df.columns), best_cluster
+        df["cluster"] = clusterer.fit_predict(data)
+        if len(df[df.cluster != -1]) > 0:   
+            best_cluster = df[df.cluster != -1].cluster.value_counts().idxmax()
+            #df['cluster'] = np.where(df['cluster'] == bestCluster, bestCluster, -1)
+            df2 = df[df.cluster == best_cluster].reset_index(drop=True)
+        
+            return df2geojson(df2, df2.columns), df2geojson(df, df.columns), best_cluster
+        
+    return df2geojson(df, df.columns), None, None

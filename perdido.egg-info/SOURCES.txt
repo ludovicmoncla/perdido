@@ -18,6 +18,7 @@ perdido/data/edda_artfl/edda_artf_dataset.csv
 perdido/data/edda_perdido/edda_perdido_vol7_nominatim_dataset.pickle
 perdido/data/edda_perdido/edda_perdido_vol7_pleiades_dataset.pickle
 perdido/utils/__init__.py
+perdido/utils/disambiguation.py
 perdido/utils/map.py
 perdido/utils/utils.py
 perdido/utils/webservices.py

@@ -33,7 +33,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 
 setuptools.setup(
     name='perdido',
-    version='0.1.25',
+    version='0.1.26',
     license='BSD-Clause-2',
     author='Ludovic Moncla',
     author_email='moncla.ludovic@gmail.com',

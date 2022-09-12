@@ -3,8 +3,8 @@ folium
 lxml
 geojson
 gpxpy
+scikit-learn
 pandas
-spacy >= 3.3.0
-jupyter
 geopandas
 matplotlib
+spacy >= 3.3.0

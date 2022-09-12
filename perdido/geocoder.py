@@ -7,7 +7,7 @@ from perdido.perdido import Perdido
 class Geocoder:
     
     def __init__(self, api_key: str = "libPython", sources: Union[List[str], None] = None, max_rows: Union[int, None] = None, 
-                alt_names: Union[bool, None] = None, bbox: Union[List[float], None] = None, country_code: Union[str, None] = None) -> None:
+                alt_names: Union[bool, None] = None, bbox: Union[List[float], None] = None, country_code: Union[str, None] = None, disambiguation: Union[str, None] = None) -> None:
         
         self.url_api = 'http://choucas.univ-pau.fr/PERDIDO/api/'
         self.serviceGeocoding = 'geocoding'
@@ -28,6 +28,8 @@ class Geocoder:
             self.bbox = bbox
         else:
             self.bbox = None
+
+        self.disambiguation = disambiguation
 
 
     def __call__(self, toponyms: Union[str, List[str]]) -> Perdido: 

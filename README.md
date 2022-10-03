@@ -7,9 +7,6 @@
 
 
 
-[http://erig.univ-pau.fr/PERDIDO/](http://erig.univ-pau.fr/PERDIDO/)
-
-
 ## Installation
 
 To install the latest stable version, you can use:
@@ -186,6 +183,7 @@ r = requests.post(url+service, params=parameters, json=data)
 
 print(r.text)
 ```
+
 
 
 

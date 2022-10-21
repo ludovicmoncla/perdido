@@ -43,13 +43,13 @@ def df2geojson(df, properties, lat='latitude', lon='longitude'):
     
     return geojson
 
-
-def clustering_disambiguation(p):
+# e : Epsilon, the maximum distance between two samples for one to be considered as in the neighborhood of the other
+def clustering_disambiguation(p, e = 0.1):
 
     df = geojson2df(p.geojson)
     data = df.loc[:,['latitude', 'longitude']]
     if len(data) >= 3:
-        clusterer = DBSCAN(eps=0.1)
+        clusterer = DBSCAN(eps = e)
 
         df["cluster"] = clusterer.fit_predict(data)
         if len(df[df.cluster != -1]) > 0:   

@@ -198,8 +198,8 @@ class Perdido:
         return pd.DataFrame(data, columns=['name', 'tag', 'lat', 'lng', 'toponym_candidates'])
 
 
-    def cluster_disambiguation(self) -> None:
-        self.geojson, self.geojson_ambiguous, self.best_cluster = clustering_disambiguation(self)
+    def cluster_disambiguation(self, e: float) -> None:
+        self.geojson, self.geojson_ambiguous, self.best_cluster = clustering_disambiguation(self, e)
 
 
 

@@ -184,10 +184,10 @@ class Perdido:
             name = e.text
             tag = e.tag
             
-            if len(e.toponyms_candidate) > 0:
-                lat = e.toponyms_candidate[0].lat
-                lng = e.toponyms_candidate[0].lng 
-                toponym_candidates = [t.to_dict() for t in e.toponyms_candidate]
+            if len(e.toponym_candidates) > 0:
+                lat = e.toponym_candidates[0].lat
+                lng = e.toponym_candidates[0].lng 
+                toponym_candidates = [t.to_dict() for t in e.toponym_candidates]
             else:
                 lat = None
                 lng = None

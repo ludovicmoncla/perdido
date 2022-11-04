@@ -79,17 +79,17 @@ print(doc.geojson)
 for entity in doc.named_entities:
     print(f'entity: {entity.text}\ttag: {entity.tag}')
     if entity.tag == 'place':
-        for t in entity.toponyms:
+        for t in entity.toponym_candidates:
             print(f' latitude: {t.lat}\tlongitude: {t.lng}\tsource {t.source}')
 ```
 
 #### Get the list of nested named entities
 
 ```python
-for nestedEntity in doc.nested_named_entities:
-    print(f'entity: {nestedEntity.text}\ttag: {nestedEntity.tag}')
-    if nestedEntity.tag == 'place':
-        for t in nestedEntity.toponyms:
+for nested_entity in doc.nested_named_entities:
+    print(f'entity: {nested_entity.text}\ttag: {nested_entity.tag}')
+    if nested_entity.tag == 'place':
+        for t in nested_entity.toponym_candidates:
             print(f' latitude: {t.lat}\tlongitude: {t.lng}\tsource {t.source}')
 ```
 

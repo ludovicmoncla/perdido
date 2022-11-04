@@ -86,7 +86,7 @@ class Entity:
 
         self.lat = toponym_candidates[0].lat if len(toponym_candidates) > 0 else None
         self.lng = toponym_candidates[0].lng if len(toponym_candidates) > 0 else None
-        self.toponyms_candidate = toponym_candidates
+        self.toponym_candidates = toponym_candidates
 
         # position, start, end ?
         if len(tokens) > 0:
@@ -102,7 +102,7 @@ class Entity:
     def __str__(self) -> str: 
         res = self.text + " " + self.tag + "\n"
         if self.tag == 'place':
-            for toponym in self.toponyms_candidate:
+            for toponym in self.toponym_candidates:
                 res += " toponym candidate > "+ str(toponym) + "\n"
         return res
 
@@ -256,7 +256,7 @@ def get_entities_from_tei(elt: Element, tag:str = 'all') -> List[Entity]:
     for e in elt.findall(xpath):
         entity = get_entity(e)
         if entity.tag == 'place':
-            entity.toponyms_candidate = get_toponyms_from_tei(e)
+            entity.toponym_candidates = get_toponyms_from_tei(e)
         entities.append(entity)
 
     for e in elt.findall(".//rs[@subtype='latlong']"):
@@ -269,7 +269,7 @@ def get_nested_entities_from_tei(elt: Element) -> List[Entity]:
     nestedEntities = []
     for e in elt.findall(".//rs[@type='ene']/rs[@subtype='ene']"):
         entity = get_entity(e)
-        entity.toponyms_candidate = get_toponyms_from_tei(e)
+        entity.toponym_candidates = get_toponyms_from_tei(e)
         #TODO fix this, issue with pickle etree element
         entity.child = '' # e.xpath(".//*[self::rs or self::name]")[0]
         entity.named_entities = get_entities_from_tei(e)

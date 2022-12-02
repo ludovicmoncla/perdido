@@ -137,7 +137,6 @@ class Perdido:
         return None
 
 
-
     def to_spacy_spans(self, entities: List[Entity], doc: Doc) -> List[Span]:
         spans = []
         for e in entities:
@@ -196,6 +195,10 @@ class Perdido:
             data.append([name, tag, lat, lng, toponym_candidates])
 
         return pd.DataFrame(data, columns=['name', 'tag', 'lat', 'lng', 'toponym_candidates'])
+
+
+    def to_geodataframe(self) -> None:
+        return gpd.GeoDataFrame.from_features(self.geojson['features'])
 
 
     def cluster_disambiguation(self, e: float) -> None:

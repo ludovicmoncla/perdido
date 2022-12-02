@@ -160,6 +160,11 @@ for t in doc.toponyms:
     print(f'lat: {t.lat}\tlng: {t.lng}\tsource {t.source}\tsourceName {t.source_name}')
 ```
 
+#### Get the toponym candidates as a GeoDataframe
+
+```python
+print(doc.to_geodataframe())
+```
 
 
 

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: perdido
-Version: 0.1.30
+Version: 0.1.31
 Summary: PERDIDO Geoparser python library
 Home-page: https://github.com/ludovicmoncla/perdido
 Author: Ludovic Moncla
@@ -177,6 +177,11 @@ for t in doc.toponyms:
     print(f'lat: {t.lat}\tlng: {t.lng}\tsource {t.source}\tsourceName {t.source_name}')
 ```
 
+#### Get the toponym candidates as a GeoDataframe
+
+```python
+print(doc.to_geodataframe())
+```
 
 
 

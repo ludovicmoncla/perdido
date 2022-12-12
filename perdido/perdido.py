@@ -201,7 +201,7 @@ class Perdido:
         return gpd.GeoDataFrame.from_features(self.geojson['features'])
 
 
-    def cluster_disambiguation(self, e: float) -> None:
+    def cluster_disambiguation(self, e: float = 0.1) -> None:
         self.geojson, self.geojson_ambiguous, self.best_cluster = clustering_disambiguation(self, e)
 
 

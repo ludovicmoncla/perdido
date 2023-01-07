@@ -115,7 +115,6 @@ class Perdido:
             self.toponyms = get_toponyms_from_geojson(self.geojson)
            
 
-    # ajouter un param pour tenir compte du best cluster
     def get_folium_map(self, properties: Union[List[str], None] = ['name', 'source'], gpx: Union[str , None] = None) -> Union[folium.Map,None]:
         m = folium.Map()
         if gpx is not None:

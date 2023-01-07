@@ -120,10 +120,11 @@ class Perdido:
         m = folium.Map()
         if gpx is not None:
             overlay_gpx(m, gpx)
-
-        if self.geometry_layer is not None:
-            folium.GeoJson(data=gpd.GeoSeries(self.geometry_layer).to_json()).add_to(m)
-
+        try:
+            if self.geometry_layer is not None:
+                folium.GeoJson(data=gpd.GeoSeries(self.geometry_layer).to_json()).add_to(m)
+        except AttributeError:
+            pass
 
         if self.geojson is not None:
             coords = list(geojson.utils.coords(self.geojson))

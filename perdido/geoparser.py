@@ -16,7 +16,7 @@ class Geoparser:
 
 
     def __init__(self, api_key: str = "libPython", lang: str = 'fr', version: str = 'Standard', sources: Union[List[str], None] = None, 
-                max_rows: Union[int, None] = None, alt_names: Union[bool, None] = None, bbox: Union[List[float], None] = None, country_code: Union[str, None] = None, disambiguation: Union[str, None] = None) -> None:
+                max_rows: Union[int, None] = None, alt_names: Union[bool, None] = None, bbox: Union[List[float], None] = None, country_code: Union[str, None] = None, geocoding_mode: Union[int, None] = None, disambiguation: Union[str, None] = None) -> None:
 
         self.url_api = 'http://choucas.univ-pau.fr/PERDIDO/api/'
         self.serviceGeoparsing = 'geoparsing'
@@ -32,6 +32,8 @@ class Geoparser:
             
         self.max_rows = max_rows
         self.alt_names = alt_names
+
+        self.geocoding_mode = geocoding_mode
 
         self.country_code = country_code
 
@@ -68,6 +70,7 @@ class Geoparser:
                     #'content': content, 
                     'lang': self.lang, 
                     'version': self.version, 
+                    'geocoding_mode': self.geocoding_mode, 
                     'max_rows': self.max_rows, 
                     'alt_names': self.alt_names,
                     'sources': self.sources}

@@ -157,7 +157,7 @@ class Perdido:
                     marker = folium.Marker(
                         location=[point['geometry']['coordinates'][1], point['geometry']['coordinates'][0]],
                         icon=folium.Icon(color=color, icon='location-pin'),
-                        popup='Name: {}<br>Source: {}<br>Type: {}'.format(name, point['properties']['source'], point['properties']['type'])
+                        popup='Name: {}<br>Source: {}'.format(name, point['properties']['source'])
                     
                     )
                     marker_group.add_child(marker)

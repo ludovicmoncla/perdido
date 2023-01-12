@@ -116,6 +116,8 @@ class Perdido:
            
 
     def get_folium_map(self, properties: Union[List[str], None] = ['name', 'source'], gpx: Union[str , None] = None) -> Union[folium.Map,None]:
+        
+        
         m = folium.Map()
         if gpx is not None:
             overlay_gpx(m, gpx)
@@ -129,10 +131,41 @@ class Perdido:
             coords = list(geojson.utils.coords(self.geojson))
             if len(coords) > 0:
                 m.fit_bounds(get_bounding_box(coords))
+                '''
                 if properties is not None:
                     folium.GeoJson(self.geojson, name='Toponyms', tooltip=folium.features.GeoJsonTooltip(fields=properties, localize=True)).add_to(m)
                 else:
                     folium.GeoJson(self.geojson, name='Toponyms').add_to(m)
+                '''
+
+                colors = ['blue','red','green','orange','purple', 'pink','gray','black', 'beige', 'white','darkblue', 'darkred', 'darkgreen','darkpurple','cadetblue', 'lightgray', 'lightblue',  'lightred', 'lightgreen']
+                marker_group = folium.FeatureGroup()
+                name_colors = {}
+                cpt_color = 0
+                # Ajouter des marqueurs à partir des données JSON
+                for point in self.geojson['features']:
+                    name = point['properties']['name']
+                    # Récupérer la couleur associée au nom
+                    color = name_colors.get(name)
+                    # Si le nom n'est pas encore dans le dictionnaire, générer une couleur aléatoire
+                    if color is None:
+                        color = colors[cpt_color]
+                        cpt_color+=1
+                        #color = '#' + ''.join([random.choice('0123456789ABCDEF') for _ in range(6)])
+                        name_colors[name] = color
+                    # Ajouter un marqueur à la carte
+                    marker = folium.Marker(
+                        location=[point['geometry']['coordinates'][1], point['geometry']['coordinates'][0]],
+                        icon=folium.Icon(color=color, icon='location-pin'),
+                        popup='Name: {}<br>Source: {}<br>Type: {}'.format(name, point['properties']['source'], point['properties']['type'])
+                    
+                    )
+                    marker_group.add_child(marker)
+
+                # Ajouter le groupe de marqueurs à la carte
+                m.add_child(marker_group)
+
+
                 return m    
         return None
 

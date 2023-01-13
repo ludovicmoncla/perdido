@@ -8,3 +8,4 @@ pandas
 geopandas
 matplotlib
 spacy >= 3.3.0
+display-xml

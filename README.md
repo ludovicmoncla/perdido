@@ -32,8 +32,9 @@ from perdido.geoparser import Geoparser
 #### Run geoparser
 
 ```python
+text = "J'ai rendez-vous proche de la place Bellecour, de la place des Célestins, au sud de la fontaine des Jacobins et près du pont Bonaparte."
 geoparser = Geoparser(version='Standard')
-doc = geoparser('Je visite la ville de Lyon, Annecy et Chamonix.')
+doc = geoparser(text)
 ```
 
 * The `version` parameter can take 2 values: *Standard* (default), *Encyclopedie*.
@@ -65,6 +66,13 @@ for token in doc:
 
 ```python
 print(doc.tei)
+```
+
+#### Print the XML-TEI output with XML syntax highlighting
+
+```python
+from display_xml import XML
+XML(doc.tei, style='lovelace')
 ```
 
 #### Print the GeoJSON output
@@ -144,7 +152,7 @@ doc = geocoder('Lyon')
 
 ```python
 geocoder = Geocoder()
-doc = geocoder(['Lyon', 'Annecy', 'Chamonix'])
+doc = geocoder(['Lyon', 'la place des Célestins', 'la fontaine des Jacobins'])
 ```
 
 #### Get the geojson result

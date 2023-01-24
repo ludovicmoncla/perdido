@@ -112,6 +112,11 @@ displacy.render(doc.to_spacy_doc(), style="ent", jupyter=True)
 displacy.render(doc.to_spacy_doc(), style="span", jupyter=True)
 ```
 
+#### Display the map (using folium library)
+```python
+doc.get_folium_map()
+```
+
 #### Saving results
 
 ```python

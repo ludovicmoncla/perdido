@@ -9,7 +9,7 @@ import geojson
 from perdido.utils.utils import Token, Entity
 from perdido.utils.utils import get_tokens_from_tei, get_entities_from_tei, get_toponyms_from_tei, get_nested_entities_from_tei, get_toponyms_from_geojson, parent_exists
 from perdido.utils.map import overlay_gpx, get_bounding_box
-from perdido.utils.disambiguation import clustering_disambiguation
+from perdido.utils.disambiguation import clustering_disambiguation, minimal_distances_disambiguation
 
 from spacy.tokens import Span
 from spacy.tokens import Doc
@@ -237,6 +237,9 @@ class Perdido:
     def cluster_disambiguation(self, e: float = 0.1) -> None:
         self.geojson, self.geojson_ambiguous, self.best_cluster = clustering_disambiguation(self, e)
 
+
+    def minimal_distances_disambiguation(self):
+        self.geojson, self.geojson_ambiguous = minimal_distances_disambiguation(self)
 
 
 class PerdidoCollection:

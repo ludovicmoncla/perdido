@@ -92,15 +92,10 @@ class Perdido:
             f.write(content)
 
 
-    def parse_tei(self, tei: Union[str , None] = None) -> None:
-        
-        if tei is not None:
-            root = etree.fromstring(tei)
-
+    def parse_tei(self) -> None:
         if self.tei is not None:
             root = etree.fromstring(self.tei)
             
-        if root:
             self.tokens = get_tokens_from_tei(root)
             self.named_entities = get_entities_from_tei(root)
             self.toponyms = get_toponyms_from_tei(root) 

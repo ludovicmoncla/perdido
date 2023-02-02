@@ -239,7 +239,7 @@ class Perdido:
 
 
     def minimal_distances_disambiguation(self):
-        self.geojson, self.geojson_ambiguous = minimal_distances_disambiguation(gpd.GeoDataFrame.from_features(self.geojson['features']))
+        self.geojson, self.geojson_ambiguous = minimal_distances_disambiguation(self.to_geodataframe())
 
 
 class PerdidoCollection:

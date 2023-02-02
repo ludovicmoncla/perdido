@@ -94,9 +94,9 @@ def get_sum_minimal_distances(gdf):
     return gdf
 
 
-def minimal_distances_disambiguation(p):
+def minimal_distances_disambiguation(gdf):
 
-    df = get_sum_minimal_distances(geojson2df(p.geojson))
+    df = get_sum_minimal_distances(gdf)
 
     df_n = df.loc[df.groupby("name")["sum_minimal_distances"].idxmin()].reset_index(drop=True)
 

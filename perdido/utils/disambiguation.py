@@ -1,6 +1,7 @@
 from typing import Dict
 from sklearn.cluster import DBSCAN
 import pandas as pd
+from geopy.distance import great_circle
 
 
 def geojson2df(resJson: Dict):
@@ -62,5 +63,38 @@ def clustering_disambiguation(p, e = 0.1):
     return df2geojson(df, df.columns), None, None
 
 
-def minimal_distance_disambiguation():
-    pass
+def compute_distances(gdf):
+    distances = {}
+
+    for index1, row1 in gdf.iterrows():
+        if gdf['name'].value_counts().get(row1['name'], 0) > 1:
+            t1 = (index1, row1['name'])
+            d = {}
+            for index2, row2 in gdf.iterrows():
+                if row1['name'] != row2['name']:
+                    dist = great_circle((row1['geometry'].y, row1['geometry'].x), (row2['geometry'].y, row2['geometry'].x)).km
+                    if row2['name'] not in d:
+                        d[row2['name']] = dist
+                    else:
+                        if dist < d[row2['name']]:
+                            d[row2['name']] = dist
+            distances[t1] = d
+    return distances
+
+
+def get_sum_minimal_distances(gdf):
+    distances = compute_distances(gdf)
+
+    for index1, row1 in gdf.iterrows():
+        d = 0
+        if gdf['name'].value_counts().get(row1['name'], 0) > 1:
+            for context_toponym, dist in distances[(index1, row1['name'])].items():
+                d += dist
+        
+        gdf.loc[index1,'sum_minimal_distances'] = d
+    return gdf
+
+
+def minimal_distance_disambiguation(p):
+
+    df = geojson2df(p.geojson)

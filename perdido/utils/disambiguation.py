@@ -90,11 +90,14 @@ def get_sum_minimal_distances(gdf):
         if gdf['name'].value_counts().get(row1['name'], 0) > 1:
             for context_toponym, dist in distances[(index1, row1['name'])].items():
                 d += dist
-        
         gdf.loc[index1,'sum_minimal_distances'] = d
     return gdf
 
 
-def minimal_distance_disambiguation(p):
+def minimal_distances_disambiguation(p):
 
-    df = geojson2df(p.geojson)
+    df = get_sum_minimal_distances(geojson2df(p.geojson))
+
+    df_n = df.loc[df.groupby("name")["sum_minimal_distances"].idxmin()].reset_index(drop=True)
+
+    return df2geojson(df_n, df_n.columns), df2geojson(df, df.columns)

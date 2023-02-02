@@ -56,7 +56,7 @@ def gdf2geojson(df, properties):
                             'coordinates':[]}}
 
         # fill in the coordinates
-        feature['geometry']['coordinates'] = [row['geometry'].y, row['geometry'].x]
+        feature['geometry']['coordinates'] = [row['geometry'].x, row['geometry'].y]
 
         # for each column, get the value and add it as a new feature property
         for prop in properties:

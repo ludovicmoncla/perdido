@@ -44,6 +44,29 @@ def df2geojson(df, properties, lat='latitude', lon='longitude'):
     
     return geojson
 
+def gdf2geojson(df, properties):
+    geojson = {'type':'FeatureCollection', 'features':[]}
+
+    # loop through each row in the dataframe and convert each row to geojson format
+    for _, row in df.iterrows():
+        # create a feature template to fill in
+        feature = {'type':'Feature',
+                'properties':{},
+                'geometry':{'type':'Point',
+                            'coordinates':[]}}
+
+        # fill in the coordinates
+        feature['geometry']['coordinates'] = [row['geometry'].y, row['geometry'].x]
+
+        # for each column, get the value and add it as a new feature property
+        for prop in properties:
+            feature['properties'][prop] = row[prop]
+        
+        # add this feature (aka, converted dataframe row) to the list of features inside our dict
+        geojson['features'].append(feature)
+    
+    return geojson
+
 # e : Epsilon, the maximum distance between two samples for one to be considered as in the neighborhood of the other
 def clustering_disambiguation(p, e = 0.1):
 
@@ -96,8 +119,8 @@ def get_sum_minimal_distances(gdf):
 
 def minimal_distances_disambiguation(gdf):
 
-    df = get_sum_minimal_distances(gdf)
+    gdf = get_sum_minimal_distances(gdf)
 
-    df_n = df.loc[df.groupby("name")["sum_minimal_distances"].idxmin()].reset_index(drop=True)
+    gdf_n = gdf.loc[gdf.groupby("name")["sum_minimal_distances"].idxmin()].reset_index(drop=True)
 
-    return df2geojson(df_n, df_n.columns), df2geojson(df, df.columns)
+    return gdf2geojson(gdf_n, gdf_n.columns), gdf2geojson(gdf, gdf.columns)

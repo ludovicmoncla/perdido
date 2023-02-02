@@ -60,3 +60,7 @@ def clustering_disambiguation(p, e = 0.1):
             return df2geojson(df2, df2.columns), df2geojson(df, df.columns), best_cluster
         
     return df2geojson(df, df.columns), None, None
+
+
+def minimal_distance_disambiguation():
+    pass

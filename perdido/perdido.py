@@ -82,12 +82,10 @@ class Perdido:
         df = self.to_dataframe()
         df.to_csv(path, sep=sep)
 
-    def to_html(self, path: str, page: bool : True) -> None:
-        html = displacy.render(doc1, style="ent", jupyter=False)
-
-        file_name = '../outputs/test.html'
-        output_path = Path("../outputs/" + file_name)
-        output_path.open("w", encoding="utf-8").write(html)
+    def to_html(self, path: str, style : str = 'ent', page: bool = True) -> None:
+        html = displacy.render(self.to_spacy_doc(), style=style, jupyter=False)
+        with open(path, 'w') as f:
+            f.write(html)
 
 
     def to_iob(self, path: str, sep: str = '\t') -> None:

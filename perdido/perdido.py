@@ -1,6 +1,7 @@
 from __future__ import annotations
 from cgitb import text
 from typing import Iterator, List, Union, Dict
+from pathlib import Path
 
 import lxml.etree as etree
 import folium
@@ -14,6 +15,8 @@ from perdido.utils.disambiguation import clustering_disambiguation, minimal_dist
 from spacy.tokens import Span
 from spacy.tokens import Doc
 from spacy.vocab import Vocab
+from spacy import displacy
+
 import json
 import pickle
 
@@ -78,6 +81,13 @@ class Perdido:
     def to_csv(self, path: str, sep: str = ',') -> None:
         df = self.to_dataframe()
         df.to_csv(path, sep=sep)
+
+    def to_html(self, path: str, page: bool : True) -> None:
+        html = displacy.render(doc1, style="ent", jupyter=False)
+
+        file_name = '../outputs/test.html'
+        output_path = Path("../outputs/" + file_name)
+        output_path.open("w", encoding="utf-8").write(html)
 
 
     def to_iob(self, path: str, sep: str = '\t') -> None:

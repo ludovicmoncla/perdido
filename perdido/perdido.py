@@ -82,8 +82,11 @@ class Perdido:
         df = self.to_dataframe()
         df.to_csv(path, sep=sep)
 
+
+    # style : Union['ent', 'span']
     def to_html(self, path: str, style : str = 'ent', page: bool = True) -> None:
         html = displacy.render(self.to_spacy_doc(), style=style, jupyter=False)
+        # TODO : add geojson leaflet
         with open(path, 'w') as f:
             f.write(html)
 
@@ -117,6 +120,7 @@ class Perdido:
 
             #self.nominal_entities = []
             #self.entities = []
+
 
     def parse_geojson(self) -> None:
         if self.geojson is not None:

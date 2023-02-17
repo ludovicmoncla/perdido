@@ -84,9 +84,17 @@ class Perdido:
 
 
     # style : Union['ent', 'span']
-    def to_html(self, path: str, style : str = 'ent', page: bool = True) -> None:
+    def to_html(self, path: str, style : str = 'ent') -> None:
+        html = '<!DOCTYPE html>'
+        html += '<html lang="fr"><head><title>Perdido output</title></head><body>'
+        
         html = displacy.render(self.to_spacy_doc(), style=style, jupyter=False)
+        
+        
         # TODO : add geojson leaflet
+        
+        html += '</body></html>'
+
         with open(path, 'w') as f:
             f.write(html)
 

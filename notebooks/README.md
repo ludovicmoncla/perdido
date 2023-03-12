@@ -18,5 +18,9 @@ pip install --upgrade perdido
 ```
 
 
+## Cite this work
+
+> Moncla, L. and Gaio, M. (2023). Perdido: Python library for geoparsing and geocoding French texts. In proceedings of the First International Workshop on Geographic Information Extraction from Texts (GeoExT'23), ECIR Conference, Dublin, Ireland.
+
 
 

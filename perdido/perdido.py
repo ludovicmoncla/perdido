@@ -53,7 +53,7 @@ class Perdido:
         self.nominal_entities = []
         
         self.sp_relations = []
-        
+
         self.toponyms = []
 
         
@@ -128,7 +128,7 @@ class Perdido:
             self.ne_event = get_entities_from_tei(root, 'event')
             self.ne_misc = get_entities_from_tei(root, 'other')
 
-            self.sp_relations = get_offset_from_tei(root, 'spRelation')
+            self.sp_relations = get_offset_from_tei(root)
 
             #self.nominal_entities = []
             #self.entities = []

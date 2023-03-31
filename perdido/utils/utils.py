@@ -316,7 +316,7 @@ def get_nested_entities_from_tei(elt: Element) -> List[Entity]:
     return nestedEntities
 
 
-def get_offset_from_tei(elt: Element, tag:str = 'all') -> List[Offset]:
+def get_offset_from_tei(elt: Element) -> List[Offset]:
     offsets = []
     
     #if tag == 'all':

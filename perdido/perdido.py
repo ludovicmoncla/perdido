@@ -203,8 +203,6 @@ class Perdido:
                     tag = 'LOC'
                 elif e.tag == 'person':
                     tag = 'PERSON'
-                #elif e.tag == 'person':
-                #    tag = 'NORP'
                 elif e.tag == 'date':
                     tag = 'DATE'
                 elif e.tag == 'event':

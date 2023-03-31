@@ -8,7 +8,7 @@ import folium
 import geojson
 
 from perdido.utils.utils import Token, Entity
-from perdido.utils.utils import get_tokens_from_tei, get_entities_from_tei, get_toponyms_from_tei, get_nested_entities_from_tei, get_toponyms_from_geojson, parent_exists
+from perdido.utils.utils import get_tokens_from_tei, get_entities_from_tei, get_toponyms_from_tei, get_nested_entities_from_tei, get_toponyms_from_geojson, get_offset_from_tei
 from perdido.utils.map import overlay_gpx, get_bounding_box
 from perdido.utils.disambiguation import clustering_disambiguation, minimal_distances_disambiguation
 
@@ -51,6 +51,8 @@ class Perdido:
 
         self.nested_named_entities = [] 
         self.nominal_entities = []
+        
+        self.sp_relations = []
         
         self.toponyms = []
 
@@ -125,6 +127,8 @@ class Perdido:
             self.ne_date = get_entities_from_tei(root, 'date')
             self.ne_event = get_entities_from_tei(root, 'event')
             self.ne_misc = get_entities_from_tei(root, 'other')
+
+            self.sp_relations = get_offset_from_tei(root, 'spRelation')
 
             #self.nominal_entities = []
             #self.entities = []

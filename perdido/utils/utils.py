@@ -68,6 +68,31 @@ class Token:
             return self.text
 
 
+
+class Offset:
+    def __init__(self, text: str, tokens: List[Token], tag: str, start: str, end: str) -> None:
+        self.text = text
+        self.tokens = tokens
+        self.tag = tag
+
+        self.start = start # attritbut startT des elements <rs>
+        self.end = end
+
+        # position, start, end ?
+        if len(tokens) > 0:
+            self.start_offset = tokens[0].id
+            self.end_offset = tokens[-1].id
+        else:
+            self.start_offset = None
+            self.end_offset = None
+        #self.sent = sent # sentence in which the entity occurs, useful?
+        #...
+
+
+    def __str__(self) -> str: 
+        return self.text + " " + self.tag + "\n"
+    
+
 class Entity:
     def __init__(self, text: str, tokens: List[Token], tag: str, start: str, end: str, id: str=None, parent: Any = None, child: Any = None, named_entities: Any = None, level: int = 0, toponym_candidates: List[Toponym] = []) -> None:
         self.text = text
@@ -279,3 +304,22 @@ def get_nested_entities_from_tei(elt: Element) -> List[Entity]:
         nestedEntities.append(entity)
     return nestedEntities
 
+
+def get_offset_from_tei(elt: Element, tag:str = 'all') -> List[Entity]:
+    entities = []
+    
+    if tag == 'all':
+        xpath = './/name'
+    elif tag in ['place', 'person', 'date', 'event', 'other']:
+        xpath = ".//name[@type='" + tag + "']"
+
+    for e in elt.findall(xpath):
+        entity = get_entity(e)
+        if entity.tag == 'place':
+            entity.toponym_candidates = get_toponyms_from_tei(e)
+        entities.append(entity)
+
+    for e in elt.findall(".//rs[@subtype='latlong']"):
+        entities.append(get_entity(e, 'subtype'))
+
+    return entities

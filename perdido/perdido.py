@@ -7,7 +7,7 @@ import lxml.etree as etree
 import folium
 import geojson
 
-from perdido.utils.utils import Token, Entity
+from perdido.utils.utils import Token, Entity, Offset
 from perdido.utils.utils import get_tokens_from_tei, get_entities_from_tei, get_toponyms_from_tei, get_nested_entities_from_tei, get_toponyms_from_geojson, get_offset_from_tei
 from perdido.utils.map import overlay_gpx, get_bounding_box
 from perdido.utils.disambiguation import clustering_disambiguation, minimal_distances_disambiguation
@@ -194,7 +194,7 @@ class Perdido:
         return None
 
 
-    def to_spacy_spans(self, entities: List[Entity], doc: Doc) -> List[Span]:
+    def to_spacy_spans(self, entities: List[Entity], offsets: List[Offset], doc: Doc) -> List[Span]:
         spans = []
         for e in entities:
             if e.start is not None and e.end is not None:
@@ -211,8 +211,12 @@ class Perdido:
                     tag = 'EVENT'
                 else:
                     tag = 'MISC'
-
                 spans.append(Span(doc, int(e.start), int(e.end), tag))
+
+        for o in offsets:
+            if o.start is not None and o.end is not None:
+                spans.append(Span(doc, int(o.start), int(o.end), 'SPREL'))
+
         return spans
 
 
@@ -226,8 +230,8 @@ class Perdido:
         #spacy_parser = spacy.blank("fr")
         #doc = spacy_parser(self.text)
   
-        doc.ents = self.to_spacy_spans(self.named_entities, doc)
-        doc.spans["sc"] = self.to_spacy_spans(self.nested_named_entities + self.named_entities, doc)
+        doc.ents = self.to_spacy_spans(self.named_entities, self.sp_relations, doc)
+        doc.spans["sc"] = self.to_spacy_spans(self.nested_named_entities + self.named_entities, self.sp_relations, doc)
 
         return doc
 

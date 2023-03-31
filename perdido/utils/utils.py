@@ -240,6 +240,17 @@ def get_entity(elt: Element, att_tag:str = 'type') -> Entity:
     return Entity(text = text, id = id, tokens = tokens, start = start, end = end, tag = tag, parent = parent)
 
 
+def get_offset(elt: Element, att_tag:str = 'subtype') -> Offset:
+    text = get_w_content(elt)
+    tag = elt.get(att_tag) if att_tag in elt.attrib else  ""
+    tokens = get_tokens_from_tei(elt)
+   
+    start = elt.get('startT') if 'startT' in elt.attrib else  None
+    end = elt.get('endT') if 'endT' in elt.attrib else  None
+    
+    return Offset(text = text, tokens = tokens, start = start, end = end, tag = tag)
+
+
 def get_toponyms_from_tei(elt: Element) -> List[Toponym]:
     toponyms = []
     for elt in elt.findall('.//location/geo'):
@@ -305,21 +316,17 @@ def get_nested_entities_from_tei(elt: Element) -> List[Entity]:
     return nestedEntities
 
 
-def get_offset_from_tei(elt: Element, tag:str = 'all') -> List[Entity]:
-    entities = []
+def get_offset_from_tei(elt: Element, tag:str = 'all') -> List[Offset]:
+    offsets = []
     
-    if tag == 'all':
-        xpath = './/name'
-    elif tag in ['place', 'person', 'date', 'event', 'other']:
-        xpath = ".//name[@type='" + tag + "']"
+    #if tag == 'all':
+    #    xpath = './/name'
+    #elif tag in ['adjacence', 'orientation']:
+    #    xpath = ".//name[@subtype='" + tag + "']"
+
+    xpath = ".//term[@type='offset']"
 
     for e in elt.findall(xpath):
-        entity = get_entity(e)
-        if entity.tag == 'place':
-            entity.toponym_candidates = get_toponyms_from_tei(e)
-        entities.append(entity)
+        offsets.append(get_offset(e))
 
-    for e in elt.findall(".//rs[@subtype='latlong']"):
-        entities.append(get_entity(e, 'subtype'))
-
-    return entities
+    return offsets

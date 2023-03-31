@@ -101,6 +101,12 @@ for nested_entity in doc.nested_named_entities:
             print(f' latitude: {t.lat}\tlongitude: {t.lng}\tsource {t.source}')
 ```
 
+#### Get the list of spatial relations
+
+```python
+for sp_relation in doc.sp_relations:
+    print(f'spatial relation: {sp_relation.text}\ttag: {sp_relation.tag}')
+```
 
 #### Shows named entities and nested named entities using the displacy library from spaCy
 

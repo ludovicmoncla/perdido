@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: perdido
-Version: 0.1.42
+Version: 0.1.43
 Summary: PERDIDO Geoparser python library
 Home-page: https://github.com/ludovicmoncla/perdido
 Author: Ludovic Moncla
@@ -118,6 +118,12 @@ for nested_entity in doc.nested_named_entities:
             print(f' latitude: {t.lat}\tlongitude: {t.lng}\tsource {t.source}')
 ```
 
+#### Get the list of spatial relations
+
+```python
+for sp_relation in doc.sp_relations:
+    print(f'spatial relation: {sp_relation.text}\ttag: {sp_relation.tag}')
+```
 
 #### Shows named entities and nested named entities using the displacy library from spaCy
 

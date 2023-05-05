@@ -29,19 +29,16 @@ class Toponym:
 
 
 class Token:
-    def __init__(self, id: str, text: str, idx: int, lemma: Union[str, None] = None, pos: Union[str, None] = None, tags: List[str] = []) -> None:
+    def __init__(self, id: str, text: str, start: int, end: int, lemma: Union[str, None] = None, pos: Union[str, None] = None, tags: List[str] = []) -> None:
         self.id = id
         self.text = text
         self.lemma = lemma
         self.pos = pos
         self.tags = tags
 
-        self.idx = idx # The character offset of the token within the parent document.
-
+        self.start = start # The character offset of the token within the parent document.
+        self.end = end
         # tag CONLL-U / BIO NE and NNE ?
-
-        self.start = 0
-        self.end = 0
           
     def __str__(self) -> str: 
         return self.tsv_format()
@@ -77,7 +74,7 @@ class Offset:
         self.tokens = tokens
         self.tag = tag
 
-        self.token_start = token_start # attritbut startT des elements <rs>
+        self.token_start = token_start # attritbut token_start des elements <rs>
         self.token_end = token_end
 
         # position, start, end ?
@@ -102,7 +99,7 @@ class Entity:
         self.tag = tag
 
         self.id = id # tei xml id
-        self.token_start = token_start # attritbut startT des elements <rs>
+        self.token_start = token_start # attritbut token_start des elements <rs>
         self.token_end = token_end
 
         self.parent = parent # seulement le parent, ou la liste des parents ?
@@ -164,7 +161,8 @@ def get_tokens_from_tei(elt: Element) -> List[Token]:
         pos = elt.get('pos') if 'pos' in elt.attrib else ""
 
         id = int(elt.get('id')[1:]) if 'id' in elt.attrib else None
-        idx = int(elt.get('idx')) if 'idx' in elt.attrib else None
+        start = int(elt.get('start')) if 'start' in elt.attrib else None
+        end = int(elt.get('end')) if 'end' in elt.attrib else None
 
         tags = []
     
@@ -176,9 +174,9 @@ def get_tokens_from_tei(elt: Element) -> List[Token]:
                 
                 if p.tag in ['rs']: # term | phr?
                     
-                    # si l'id de w est le meme que startT alors B- sinon I- 
+                    # si l'id de w est le meme que token_start alors B- sinon I- 
                    
-                    token_start = int(p.get('startT')) if 'startT' in p.attrib else None
+                    token_start = int(p.get('token_start')) if 'token_start' in p.attrib else None
                     if token_start is not None and id is not None:
                     
                         if token_start == id:
@@ -216,7 +214,7 @@ def get_tokens_from_tei(elt: Element) -> List[Token]:
 
         tags.reverse()
 
-        tokens.append(Token(id+1, elt.text, idx, lemma, pos, tags))
+        tokens.append(Token(id+1, elt.text, start, end, lemma, pos, tags))
     return tokens
 
 
@@ -230,13 +228,13 @@ def get_entity(elt: Element, att_tag:str = 'type') -> Entity:
     token_end = None
     id = elt.get('id') if 'id' in elt.attrib else  ""
     if elt.tag == 'name':
-        token_start = elt.get('startT') if 'startT' in elt.attrib else  None
-        token_end = elt.get('endT') if 'endT' in elt.attrib else  None
+        token_start = elt.get('token_start') if 'token_start' in elt.attrib else  None
+        token_end = elt.get('token_end') if 'token_end' in elt.attrib else  None
     elif elt.tag == 'rs':
         subtype = elt.get('subtype') if 'subtype' in elt.attrib else  None
         if subtype == 'ene' or subtype == 'latlong':
-            token_start = elt.get('startT') if 'startT' in elt.attrib else  None
-            token_end = elt.get('endT') if 'endT' in elt.attrib else  None
+            token_start = elt.get('token_start') if 'token_start' in elt.attrib else  None
+            token_end = elt.get('token_end') if 'token_end' in elt.attrib else  None
         
     #TODO get and return lat/lng if it is a place
     return Entity(text = text, id = id, tokens = tokens, token_start = token_start, token_end = token_end, tag = tag, parent = parent)
@@ -247,8 +245,8 @@ def get_offset(elt: Element, att_tag:str = 'subtype') -> Offset:
     tag = elt.get(att_tag) if att_tag in elt.attrib else  ""
     tokens = get_tokens_from_tei(elt)
    
-    token_start = elt.get('startT') if 'startT' in elt.attrib else  None
-    token_end = elt.get('endT') if 'endT' in elt.attrib else  None
+    token_start = elt.get('token_start') if 'token_start' in elt.attrib else  None
+    token_end = elt.get('token_end') if 'token_end' in elt.attrib else  None
     
     return Offset(text = text, tokens = tokens, token_start = token_start, token_end = token_end, tag = tag)
 

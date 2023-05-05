@@ -209,11 +209,11 @@ class Perdido:
                     tag = 'EVENT'
                 else:
                     tag = 'MISC'
-                spans.append(Span(doc, int(e.start), int(e.end), tag))
+                spans.append(Span(doc, int(e.token_start), int(e.token_end), tag))
 
         for o in offsets:
             if o.start is not None and o.end is not None:
-                spans.append(Span(doc, int(o.start), int(o.end), 'SPREL'))
+                spans.append(Span(doc, int(o.token_start), int(o.token_end), 'SPREL'))
 
         return spans
 

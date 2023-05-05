@@ -40,6 +40,8 @@ class Token:
 
         # tag CONLL-U / BIO NE and NNE ?
 
+        self.start = 0
+        self.end = 0
           
     def __str__(self) -> str: 
         return self.tsv_format()
@@ -70,13 +72,13 @@ class Token:
 
 
 class Offset:
-    def __init__(self, text: str, tokens: List[Token], tag: str, start: str, end: str) -> None:
+    def __init__(self, text: str, tokens: List[Token], tag: str, token_start: str, token_end: str) -> None:
         self.text = text
         self.tokens = tokens
         self.tag = tag
 
-        self.start = start # attritbut startT des elements <rs>
-        self.end = end
+        self.token_start = token_start # attritbut startT des elements <rs>
+        self.token_end = token_end
 
         # position, start, end ?
         if len(tokens) > 0:
@@ -94,14 +96,14 @@ class Offset:
     
 
 class Entity:
-    def __init__(self, text: str, tokens: List[Token], tag: str, start: str, end: str, id: str=None, parent: Any = None, child: Any = None, named_entities: Any = None, level: int = 0, toponym_candidates: List[Toponym] = []) -> None:
+    def __init__(self, text: str, tokens: List[Token], tag: str, token_start: str, token_end: str, id: str=None, parent: Any = None, child: Any = None, named_entities: Any = None, level: int = 0, toponym_candidates: List[Toponym] = []) -> None:
         self.text = text
         self.tokens = tokens
         self.tag = tag
 
         self.id = id # tei xml id
-        self.start = start # attritbut startT des elements <rs>
-        self.end = end
+        self.token_start = token_start # attritbut startT des elements <rs>
+        self.token_end = token_end
 
         self.parent = parent # seulement le parent, ou la liste des parents ?
         self.child = child
@@ -176,10 +178,10 @@ def get_tokens_from_tei(elt: Element) -> List[Token]:
                     
                     # si l'id de w est le meme que startT alors B- sinon I- 
                    
-                    startT = int(p.get('startT')) if 'startT' in p.attrib else None
-                    if startT is not None and id is not None:
+                    token_start = int(p.get('startT')) if 'startT' in p.attrib else None
+                    if token_start is not None and id is not None:
                     
-                        if startT == id:
+                        if token_start == id:
                             tag = 'B-'
                         else:
                             tag = 'I-'
@@ -224,20 +226,20 @@ def get_entity(elt: Element, att_tag:str = 'type') -> Entity:
     tokens = get_tokens_from_tei(elt)
     #TODO fix this, issue with pickle etree element
     parent = ''#elt.getparent() 
-    start = None
-    end = None
+    token_start = None
+    token_end = None
     id = elt.get('id') if 'id' in elt.attrib else  ""
     if elt.tag == 'name':
-        start = elt.get('startT') if 'startT' in elt.attrib else  None
-        end = elt.get('endT') if 'endT' in elt.attrib else  None
+        token_start = elt.get('startT') if 'startT' in elt.attrib else  None
+        token_end = elt.get('endT') if 'endT' in elt.attrib else  None
     elif elt.tag == 'rs':
         subtype = elt.get('subtype') if 'subtype' in elt.attrib else  None
         if subtype == 'ene' or subtype == 'latlong':
-            start = elt.get('startT') if 'startT' in elt.attrib else  None
-            end = elt.get('endT') if 'endT' in elt.attrib else  None
+            token_start = elt.get('startT') if 'startT' in elt.attrib else  None
+            token_end = elt.get('endT') if 'endT' in elt.attrib else  None
         
     #TODO get and return lat/lng if it is a place
-    return Entity(text = text, id = id, tokens = tokens, start = start, end = end, tag = tag, parent = parent)
+    return Entity(text = text, id = id, tokens = tokens, token_start = token_start, token_end = token_end, tag = tag, parent = parent)
 
 
 def get_offset(elt: Element, att_tag:str = 'subtype') -> Offset:
@@ -245,10 +247,10 @@ def get_offset(elt: Element, att_tag:str = 'subtype') -> Offset:
     tag = elt.get(att_tag) if att_tag in elt.attrib else  ""
     tokens = get_tokens_from_tei(elt)
    
-    start = elt.get('startT') if 'startT' in elt.attrib else  None
-    end = elt.get('endT') if 'endT' in elt.attrib else  None
+    token_start = elt.get('startT') if 'startT' in elt.attrib else  None
+    token_end = elt.get('endT') if 'endT' in elt.attrib else  None
     
-    return Offset(text = text, tokens = tokens, start = start, end = end, tag = tag)
+    return Offset(text = text, tokens = tokens, token_start = token_start, token_end = token_end, tag = tag)
 
 
 def get_toponyms_from_tei(elt: Element) -> List[Toponym]:

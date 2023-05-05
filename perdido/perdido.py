@@ -197,7 +197,7 @@ class Perdido:
     def to_spacy_spans(self, entities: List[Entity], offsets: List[Offset], doc: Doc) -> List[Span]:
         spans = []
         for e in entities:
-            if e.start is not None and e.end is not None:
+            if e.token_start is not None and e.token_end is not None:
                 #print(e.text, e.tag, e.start, e.end)
                 if e.tag == 'place':
                     tag = 'LOC'

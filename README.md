@@ -41,7 +41,7 @@ doc = geoparser(text)
 
 #### Get tokens
 
-* Access token attributes:
+* Access token attributes (text, lemma and [UPOS](https://universaldependencies.org/u/pos/) part-of-speech tag):
 
 ```python
 for token in doc:

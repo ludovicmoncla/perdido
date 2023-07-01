@@ -14,8 +14,7 @@ from pandas.core.series import Series
 
 class Geoparser:
 
-
-    def __init__(self, api_key: str = "libPython", lang: str = 'fr', version: str = 'Standard', sources: Union[List[str], None] = None, 
+    def __init__(self, api_key: str = "libPython", lang: str = 'fr', version: str = 'Standard', pos_tagger: str = 'spacy', sources: Union[List[str], None] = None, 
                 max_rows: Union[int, None] = None, alt_names: Union[bool, None] = None, bbox: Union[List[float], None] = None, 
                 country_code: Union[str, None] = None, geocoding_mode: Union[int, None] = None, disambiguation: Union[str, None] = None) -> None:
 
@@ -25,6 +24,7 @@ class Geoparser:
         self.lang = lang
         self.api_key = api_key
         self.version = version
+        self.pos_tagger = pos_tagger
 
         if sources is not None:
             self.sources = sources
@@ -74,7 +74,8 @@ class Geoparser:
                     'geocoding_mode': self.geocoding_mode, 
                     'max_rows': self.max_rows, 
                     'alt_names': self.alt_names,
-                    'sources': self.sources}
+                    'sources': self.sources,
+                    'pos_tagger': self.pos_tagger}
             
             if self.bbox is not None:
                 parameters['bbox'] = self.bbox

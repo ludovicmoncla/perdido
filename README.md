@@ -33,11 +33,15 @@ from perdido.geoparser import Geoparser
 
 ```python
 text = "J'ai rendez-vous proche de la place Bellecour, de la place des Célestins, au sud de la fontaine des Jacobins et près du pont Bonaparte."
-geoparser = Geoparser(version='Standard')
+geoparser = Geoparser()
 doc = geoparser(text)
 ```
 
-* The `version` parameter can take 2 values: *Standard* (default), *Encyclopedie*.
+Some parameters can be set when initializing the `Geoparser` object:
+
+* `version`: *Standard* (default), *Encyclopedie*
+* `pos_tagger`: *spacy* (default), *stanza*, and *treetagger*
+
 
 #### Get tokens
 
@@ -158,6 +162,8 @@ from perdido.geocoder import Geocoder
 geocoder = Geocoder()
 doc = geocoder('Lyon')
 ```
+
+
 
 #### Geocode a list of place names
 

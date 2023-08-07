@@ -113,6 +113,10 @@ class Perdido:
             f.write(content)
 
 
+    def to_connlu(self, path: str) -> None:
+        pass
+
+
     def parse_tei(self) -> None:
         if self.tei is not None:
             root = etree.fromstring(self.tei)

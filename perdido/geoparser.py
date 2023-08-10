@@ -16,7 +16,7 @@ class Geoparser:
 
     def __init__(self, api_key: str = "libPython", lang: str = 'fr', version: str = 'Standard', pos_tagger: str = 'spacy', sources: Union[List[str], None] = None, 
                 max_rows: Union[int, None] = None, alt_names: Union[bool, None] = None, bbox: Union[List[float], None] = None, 
-                country_code: Union[str, None] = None, geocoding_mode: Union[int, None] = None, disambiguation: Union[str, None] = None) -> None:
+                country_code: Union[str, None] = None, geocoding_mode: Union[int, None] = None, disambiguation: Union[str, None] = None, input_format:str = 'txt') -> None:
 
         self.url_api = 'http://choucas.univ-pau.fr/PERDIDO/api/'
         self.serviceGeoparsing = 'geoparsing'
@@ -44,6 +44,7 @@ class Geoparser:
             self.bbox = None
 
         self.disambiguation = disambiguation
+        self.input_format = input_format
 
 
     def __call__(self, content: Union[str, List[str], Series]) -> Union[Perdido, PerdidoCollection, None]:
@@ -75,7 +76,8 @@ class Geoparser:
                     'max_rows': self.max_rows, 
                     'alt_names': self.alt_names,
                     'sources': self.sources,
-                    'pos_tagger': self.pos_tagger}
+                    'pos_tagger': self.pos_tagger,
+                    'input_format': self.input_format}
             
             if self.bbox is not None:
                 parameters['bbox'] = self.bbox

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: perdido
-Version: 0.1.46
+Version: 0.1.47
 Summary: PERDIDO Geoparser python library
 Home-page: https://github.com/ludovicmoncla/perdido
 Author: Ludovic Moncla
@@ -50,15 +50,19 @@ from perdido.geoparser import Geoparser
 
 ```python
 text = "J'ai rendez-vous proche de la place Bellecour, de la place des Célestins, au sud de la fontaine des Jacobins et près du pont Bonaparte."
-geoparser = Geoparser(version='Standard')
+geoparser = Geoparser()
 doc = geoparser(text)
 ```
 
-* The `version` parameter can take 2 values: *Standard* (default), *Encyclopedie*.
+Some parameters can be set when initializing the `Geoparser` object:
+
+* `version`: *Standard* (default), *Encyclopedie*
+* `pos_tagger`: *spacy* (default), *stanza*, and *treetagger*
+
 
 #### Get tokens
 
-* Access token attributes:
+* Access token attributes (text, lemma and [UPOS](https://universaldependencies.org/u/pos/) part-of-speech tag):
 
 ```python
 for token in doc:
@@ -175,6 +179,13 @@ from perdido.geocoder import Geocoder
 geocoder = Geocoder()
 doc = geocoder('Lyon')
 ```
+
+Some parameters can be set when initializing the `Geocoder` object:
+
+* `sources`: 
+* `max_rows`: 
+* `country_code`: 
+* `bbox`: 
 
 #### Geocode a list of place names
 

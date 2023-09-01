@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 authors:
-- family-names: "Ludovic"
-  given-names: "Moncla"
+- family-names: "Moncla"
+  given-names: "Ludovic"
   orcid: "https://orcid.org/0000-0002-1590-9546"
 title: "Perdido Geoparser Python library"
 version: 0.1.48
@@ -11,11 +11,11 @@ url: "https://github.com/ludovicmoncla/perdido"
 preferred-citation:
   type: conference-paper
   authors:
-  - family-names: "Ludovic"
-    given-names: "Moncla"
+  - family-names: "Moncla"
+    given-names: "Ludovic"
     orcid: "https://orcid.org/0000-0002-1590-9546"
-  - family-names: "Mauro"
-    given-names: "Gaio"
+  - family-names: "Gaio"
+    given-names: "Mauro"
     orcid: "https://orcid.org/0000-0002-8041-4240"
   doi: "10.0000/00000"
   booktitle: "Proceedings of the First Workshop on Geographic Information Extraction from Texts (GeoExT 2023)"

@@ -17,10 +17,26 @@ preferred-citation:
   - family-names: "Gaio"
     given-names: "Mauro"
     orcid: "https://orcid.org/0000-0002-8041-4240"
-  doi: "10.0000/00000"
-  booktitle: "Proceedings of the First Workshop on Geographic Information Extraction from Texts (GeoExT 2023)"
+  collection-title: "Proceedings of the First Workshop on Geographic Information Extraction from Texts (GeoExT 2023)"
+  collection-doi: https://ceur-ws.org/Vol-3385/
+  editors:
+    - family-names: Hu
+      given-names: Xuke
+    - family-names: Hu
+      given-names: Yingjie
+    - family-names: Resch
+      given-names: Bernd
+    - family-names: Kersten
+      given-names: Jens
+    - family-names: Stock
+      given-names: Kristin
+  conference:
+    - name: First Workshop on Geographic Information Extraction from Texts (GeoExT 2023)
+      city: Dublin
+      country: Ireland
+      date-start: 2023-04-02
+      date-end: 2023-04-02
   start: 17 # First page number
   end: 22 # Last page number
   title: "Perdido: Python library for geoparsing and geocoding French texts"
-  address: "Dublin, Ireland"
   year: 2023

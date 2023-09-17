@@ -334,5 +334,13 @@ def get_offset_from_tei(elt: Element) -> List[Offset]:
 
 def get_text_from_tei(elt: Element) -> str:
     text = ''
-
+    e = 0
+    for word in elt.findall('.//w'):
+        s_tmp = word.get('start')
+        e_tmp = word.get('end')
+        if e > 0:
+            for i in range(int(s_tmp) - e):
+                text += ' '
+        text += word.text
+        e = int(e_tmp)
     return text

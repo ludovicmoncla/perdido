@@ -330,3 +330,9 @@ def get_offset_from_tei(elt: Element) -> List[Offset]:
         offsets.append(get_offset(e))
 
     return offsets
+
+
+def get_text_from_tei(elt: Element) -> str:
+    text = ''
+
+    return text

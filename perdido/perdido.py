@@ -8,7 +8,7 @@ import folium
 import geojson
 
 from perdido.utils.utils import Token, Entity, Offset
-from perdido.utils.utils import get_tokens_from_tei, get_entities_from_tei, get_toponyms_from_tei, get_nested_entities_from_tei, get_toponyms_from_geojson, get_offset_from_tei
+from perdido.utils.utils import get_text_from_tei, get_tokens_from_tei, get_entities_from_tei, get_toponyms_from_tei, get_nested_entities_from_tei, get_toponyms_from_geojson, get_offset_from_tei
 from perdido.utils.map import overlay_gpx, get_bounding_box
 from perdido.utils.disambiguation import clustering_disambiguation, minimal_distances_disambiguation
 
@@ -120,7 +120,7 @@ class Perdido:
     def parse_tei(self) -> None:
         if self.tei is not None:
             root = etree.fromstring(self.tei)
-            
+            self.text = get_text_from_tei(root)
             self.tokens = get_tokens_from_tei(root)
             self.named_entities = get_entities_from_tei(root)
             self.toponyms = get_toponyms_from_tei(root) 

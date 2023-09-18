@@ -91,3 +91,7 @@ perdido/utils/disambiguation.py
 perdido/utils/map.py
 perdido/utils/utils.py
 perdido/utils/webservices.py
+tests/test_folium.py
+tests/test_geojson.py
+tests/test_gpx.py
+tests/test_iter.py

@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: perdido
-Version: 0.1.47
+Version: 0.1.49
 Summary: PERDIDO Geoparser python library
 Home-page: https://github.com/ludovicmoncla/perdido
 Author: Ludovic Moncla
@@ -14,6 +14,18 @@ Classifier: Operating System :: MacOS
 Classifier: Programming Language :: Python :: 3
 Description-Content-Type: text/markdown
 License-File: LICENSE
+Requires-Dist: requests
+Requires-Dist: folium
+Requires-Dist: lxml
+Requires-Dist: geojson
+Requires-Dist: gpxpy
+Requires-Dist: scikit-learn
+Requires-Dist: pandas
+Requires-Dist: geopandas
+Requires-Dist: matplotlib
+Requires-Dist: spacy>=3.3.0
+Requires-Dist: display-xml
+Requires-Dist: geopy
 
 # Perdido Geoparser Python library
 

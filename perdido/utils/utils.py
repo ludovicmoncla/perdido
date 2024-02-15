@@ -183,12 +183,18 @@ def get_tokens_from_tei(elt: Element) -> List[Token]:
                             tag = 'B-'
                         else:
                             tag = 'I-'
-
                         
                         type = p.get('type') if 'type' in p.attrib else  None
                         if type is not None:
                             if type == 'place':
-                                tag += 'LOC'
+                                subtype = p.get('subtype') if 'subtype' in p.attrib else None
+                                if subtype is not None:
+                                    if subtype == 'latlong':
+                                        tag += 'LATLNG'
+                                    else:
+                                        tag += 'LOC'
+                                else:
+                                    tag += 'LOC'
                             elif type == 'person':
                                 tag += 'PER'
                             elif type == 'date':
